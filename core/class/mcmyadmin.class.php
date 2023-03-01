@@ -37,9 +37,16 @@ class mcmyadmin extends eqLogic {
 
   /*
   * Fonction exécutée automatiquement toutes les minutes par Jeedom
-  public static function cron() {}
   */
-
+  public static function cron() {
+    foreach (self::byType('mcmyadmin', true) as $mcmyadmin) { //parcours tous les équipements actifs du plugin vdm
+      $cmd = $mcmyadmin->getCmd(null, 'refresh'); //retourne la commande "refresh" si elle existe
+      if (!is_object($cmd)) { //Si la commande n'existe pas
+        continue; //continue la boucle
+      }
+      $cmd->execCmd(); //la commande existe on la lance
+    }
+  }
   /*
   * Fonction exécutée automatiquement toutes les 5 minutes par Jeedom
   public static function cron5() {}
@@ -86,6 +93,10 @@ class mcmyadmin extends eqLogic {
 
   // Fonction exécutée automatiquement après la mise à jour de l'équipement
   public function postUpdate() {
+    $cmd = $this->getCmd(null, 'refresh'); //On recherche la commande refresh de l’équipement
+    if (is_object($cmd)) { //elle existe et on lance la commande
+      $cmd->execCmd();
+    }
   }
 
   // Fonction exécutée automatiquement avant la sauvegarde (création ou mise à jour) de l'équipement
@@ -94,6 +105,27 @@ class mcmyadmin extends eqLogic {
 
   // Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement
   public function postSave() {
+    $info = $this->getCmd(null, 'status');
+    if (!is_object($info)) {
+      $info = new mcmyadminCmd();
+      $info->setName(__('status', __FILE__));
+    }
+    $info->setLogicalId('status');
+    $info->setEqLogic_id($this->getId());
+    $info->setType('info');
+    $info->setSubType('string');
+    $info->save();
+  
+    $refresh = $this->getCmd(null, 'refresh');
+    if (!is_object($refresh)) {
+      $refresh = new mcmyadminCmd();
+      $refresh->setName(__('Rafraichir', __FILE__));
+    }
+    $refresh->setEqLogic_id($this->getId());
+    $refresh->setLogicalId('refresh');
+    $refresh->setType('action');
+    $refresh->setSubType('other');
+    $refresh->save();
   }
 
   // Fonction exécutée automatiquement avant la suppression de l'équipement
@@ -107,13 +139,13 @@ class mcmyadmin extends eqLogic {
   /*
   * Permet de crypter/décrypter automatiquement des champs de configuration des équipements
   * Exemple avec le champ "Mot de passe" (password)
+  */
   public function decrypt() {
     $this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
   }
   public function encrypt() {
     $this->setConfiguration('password', utils::encrypt($this->getConfiguration('password')));
   }
-  */
 
   /*
   * Permet de modifier l'affichage du widget (également utilisable par les commandes)
@@ -162,8 +194,78 @@ class mcmyadminCmd extends cmd {
 
   // Exécution d'une commande
   public function execute($_options = array()) {
+    $eqlogic = $this->getEqLogic(); //récupère l'éqlogic de la commande $this
+    switch ($this->getLogicalId()) { //vérifie le logicalid de la commande
+      case 'refresh': // LogicalId de la commande rafraîchir que l’on a créé dans la méthode Postsave de la classe vdm .
+      $info = $eqlogic->getstatus(); //On lance la fonction getstatus() pour récupérer une vdm et on la stocke dans la variable $info
+      $eqlogic->checkAndUpdateCmd('status', $info); //on met à jour la commande avec le LogicalId "story"  de l'eqlogic
+      break;
+    }
+  }
+
+  public function getstatus() {
+    return "test";
+    /*
+    $adresse = $this->getConfiguration("adresse");
+    $port = $this->getConfiguration("port");
+    $utilisateur = $this->getConfiguration("utilisateur");
+    $password = $this->getConfiguration("password");
+    $opts = array(
+      'http'=>array(
+        'method'=>"GET",
+        'header'=>"Content-Type: application/json\r\n" .
+                  "Accept: application/json\r\n"
+      )
+    );
+    $context = stream_context_create($opts);
+    $url = "http://" . $adresse . ":" . $port . "/data.json?req=login&Username=" . $utilisateur . "&Password=" . $password . "&Token=";
+    $data = file_get_contents($url, false, $context);
+    @$dom = new DOMDocument();
+    libxml_use_internal_errors(true);
+    $dom->loadHTML($data);
+    libxml_use_internal_errors(false);
+    $xpath = new DOMXPath($dom);
+    $divs = $xpath->query('//article[@class="art-panel col-xs-12"]//div[@class="panel-content"]//p//a');
+    return $divs[0]->nodeValue ;
+    */
   }
 
   /*     * **********************Getteur Setteur*************************** */
-
+  /*
+  import requests
+  import json
+  data = {}
+  headers = {
+      "Content-Type": "application/json",
+    "Accept": "application/json"
+  }
+  url = "http://192.168.2.55:8080/data.json?req=login&Username=admin&Password=pass123&Token="
+  response = requests.get(url, json=data, headers=headers)
+  if response.status_code == 200:
+    data = json.loads(response.text)
+    url = "http://192.168.2.55:8080/data.json?req=getstatus&Username=admin&Password=pass123&MCMASESSIONID=" + data["MCMASESSIONID"]
+    response = requests.get(url, json=data, headers=headers)
+    if response.status_code == 200:
+      data = json.loads(response.text)
+      
+      {
+      'status': 200,
+      'state': 0,
+      'failed': False,
+      'failmsg': None,
+      'maxram': 2048,
+      'users': 0,
+      'maxusers': 10,
+      'userinfo': {},
+      'time': '2023-02-18 18:59:30',
+      'ram': 0,
+      'starttime': '[Not Running]',
+      'uptime': None,
+      'cpuusage': 0
+      }
+      jeedom send data
+      
+      url = "http://192.168.2.55:8080/data.json?req=logout&Username=admin&Password=pass123&MCMASESSIONID=" + data["MCMASESSIONID"]
+      response = requests.get(url, json=data, headers=headers)
+      */
 }
