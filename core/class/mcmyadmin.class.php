@@ -93,10 +93,10 @@ class mcmyadmin extends eqLogic {
 
   // Fonction exécutée automatiquement après la mise à jour de l'équipement
   public function postUpdate() {
-    $cmd = $this->getCmd(null, 'refresh'); //On recherche la commande refresh de l’équipement
-    if (is_object($cmd)) { //elle existe et on lance la commande
-      $cmd->execCmd();
-    }
+  //  $cmd = $this->getCmd(null, 'refresh'); //On recherche la commande refresh de l’équipement
+  //  if (is_object($cmd)) { //elle existe et on lance la commande
+  //    $cmd->execCmd();
+  //  }
   }
 
   // Fonction exécutée automatiquement avant la sauvegarde (création ou mise à jour) de l'équipement
@@ -105,16 +105,16 @@ class mcmyadmin extends eqLogic {
 
   // Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement
   public function postSave() {
-    $info = $this->getCmd(null, 'status');
+    $status = $this->getCmd(null, 'status');
     if (!is_object($info)) {
-      $info = new mcmyadminCmd();
-      $info->setName(__('status', __FILE__));
+      $status = new mcmyadminCmd();
+      $status->setName(__('Status', __FILE__));
     }
-    $info->setLogicalId('status');
-    $info->setEqLogic_id($this->getId());
-    $info->setType('info');
-    $info->setSubType('string');
-    $info->save();
+    $status->setEqLogic_id($this->getId());
+    $status->setLogicalId('status');
+    $status->setType('info');
+    $status->setSubType('string');
+    $status->save();
   
     $refresh = $this->getCmd(null, 'refresh');
     if (!is_object($refresh)) {
@@ -204,12 +204,14 @@ class mcmyadminCmd extends cmd {
   }
 
   public function getstatus() {
-    return "test";
+    $adresse = $this->getConfiguration("adresse", "localhost");
+    $port = $this->getConfiguration("port", "8080");
+    $utilisateur = $this->getConfiguration("utilisateur", "admin");
+    $password = $this->getConfiguration("password", "admin");
+    $url = "http://" . $adresse . ":" . $port . "/data.json?req=login&Username=" . $utilisateur . "&Password=" . $password . "&Token=";
+    return $url;
     /*
-    $adresse = $this->getConfiguration("adresse");
-    $port = $this->getConfiguration("port");
-    $utilisateur = $this->getConfiguration("utilisateur");
-    $password = $this->getConfiguration("password");
+    $this->setConfiguration("sessionid","mon_type");
     $opts = array(
       'http'=>array(
         'method'=>"GET",
