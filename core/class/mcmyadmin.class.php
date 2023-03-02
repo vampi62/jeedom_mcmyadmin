@@ -171,6 +171,201 @@ class mcmyadmin extends eqLogic {
 
   /*     * **********************Getteur Setteur*************************** */
 
+
+
+  public function getstgatus() {
+    $adresse = $this->getConfiguration("adresse", "localhost");
+    $port = $this->getConfiguration("port", "8080");
+    $utilisateur = $this->getConfiguration("utilisateur", "admin");
+    $password = $this->getConfiguration("password", "admin");
+    $url = "http://" . $adresse . ":" . $port . "/data.json?req=login&Username=" . $utilisateur . "&Password=" . $password . "&Token=";
+    return $url;
+    /*
+    $this->setConfiguration("sessionid","mon_type");
+    $opts = array(
+      'http'=>array(
+        'method'=>"GET",
+        'header'=>"Content-Type: application/json\r\n" .
+                  "Accept: application/json\r\n"
+      )
+    );
+    $context = stream_context_create($opts);
+    $url = "http://" . $adresse . ":" . $port . "/data.json?req=login&Username=" . $utilisateur . "&Password=" . $password . "&Token=";
+    $data = file_get_contents($url, false, $context);
+    @$dom = new DOMDocument();
+    libxml_use_internal_errors(true);
+    $dom->loadHTML($data);
+    libxml_use_internal_errors(false);
+    $xpath = new DOMXPath($dom);
+    $divs = $xpath->query('//article[@class="art-panel col-xs-12"]//div[@class="panel-content"]//p//a');
+    return $divs[0]->nodeValue ;
+    */
+  }
+
+
+	public function getFullConfig () {
+		return $this->request(array('req' => 'getfullconfig'));
+	}
+	public function getBackupStatus () {
+		return $this->request(array('req' => 'getbackupstatus'));
+	}
+	public function getDeleteStatus () {
+		return $this->request(array('req' => 'getdeletestatus'));
+	}
+	public function getRestoreStatus () {
+		return $this->request(array('req' => 'getrestorestatus'));
+	}
+	public function getUpdateStatus () {
+		return $this->request(array('req' => 'getupdatestatus'));
+	}
+	public function getStatus () {
+		return $this->request(array('req' => 'getstatus'));
+	}
+	public function getExtensions () {
+		return $this->request(array('req' => 'getextensions'));
+	}
+	public function getPlugins () {
+		return $this->request(array('req' => 'getplugins'));
+	}
+	public function getProviderInfo () {
+		return $this->request(array('req' => 'getproviderinfo'));
+	}
+	public function getServerInfo () {
+		return $this->request(array('req' => 'getserverinfo'));
+	}
+	public function getTip () {
+		return $this->request(array('req' => 'gettip'));
+	}
+	public function getVersions () {
+		return $this->request(array('req' => 'getversions'));
+	}
+	public function getBackupList () {
+		return $this->request(array('req' => 'getbackuplist'));
+	}
+  public function getPlayers() {
+    $request = $this->getStatus();
+    $playerlist = array();
+    if(isset($request->userinfo)) {
+      foreach($request->userinfo as $user => $values) {
+          $playerlist[] = $user;
+        }
+    }
+    return $playerlist;
+	}
+
+	public function getConfig ($key) {
+		if($key) {
+      return $this->request(array('req' => 'getconfig' , 'key' => $key));
+		}
+	}
+	public function getChat ($since) {
+		if($since) {
+      return $this->request(array('req' => 'getchat' , 'since' => $since));
+		}
+	}
+
+
+
+	public function setConfig ($key, $value) {
+		if($key && $value) {
+      return $this->request(array('req' => 'setconfig' , 'key' => $key, 'value' => $value));
+		}
+	}
+	public function sendChat ($message) {
+		if($message) {
+      return $this->request(array('req' => 'sendchat' , 'message' => $message));
+		}
+	}
+
+
+
+  public function sleepServer () {
+    return $this->request(array('req' => 'sleepserver'));
+  }
+  public function startServer () {
+    return $this->request(array('req' => 'startserver'));
+  }
+  public function stopServer () {
+    return $this->request(array('req' => 'stopserver'));
+  }
+	public function killServer () {
+		return $this->request(array('req' => 'killserver'));
+	}
+	public function reload () {
+		return $this->request(array('req' => 'reload'));
+	}
+	public function restartServer () {
+		return $this->request(array('req' => 'restartserver'));
+	}
+  public function updateMC () {
+    return $this->request(array('req' => 'updatemc'));
+  }
+  public function updateMCMA () {
+    return $this->request(array('req' => 'updatemcma'));
+  }
+
+
+  public function doDiagnostics () {
+		return $this->request(array('req' => 'dodiagnostics'));
+	}
+	public function logout () {
+		return $this->request(array('req' => 'logout'));
+	}
+	public function getTokenAuth ($username) {
+		if($username) {
+      return $this->request(array('req' => 'gettokenauth' , 'username' => $username));
+		}
+	}
+	public function login($user = 'admin',$pass = '',$host = 'localhost',$port = '8080') {
+		if(!empty($user) && !empty($pass) && !empty($host) && !empty($port)) {
+			$request = $this->request(array('req'=>'login', 'Username'=>$user, 'Password'=>$pass));
+            if (isset($request->MCMASESSIONID)) {
+                $this->session_id = $request->MCMASESSIONID;
+            }
+			if($request->success == 1){
+				$this->logged_in = true;
+			} else {
+				throw new Exception('Incorrect config details');
+			}
+		} else {
+			throw new Exception('Not enough Paramters');
+		}
+	}
+
+
+  private function request($args = array()) {
+		if(empty($this->config['host']) || empty($this->config['port'])) {
+			throw new Exception('No host or port has been given');
+		}
+    if (isset($this->session_id)) {
+      $args['MCMASESSIONID'] = $this->session_id;
+    } else {
+        $args['Token'] = '';
+    }
+    $param = '';
+		if(!empty($args)) {
+			$param = http_build_query($args);
+		}
+    $protocol = 'http';
+    $protocol = 'https';
+    $url = $protocol . '://' . $this->config['host'] . ':' . $this->config['port'] . '/data.json?' . $param;
+		$ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_HTTPHEADER , array('Content-type: application/json','Accept: application/json'));
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION , 1);
+    curl_setopt($ch, CURLOPT_USERAGENT, 'Firefox/mozilla McMyAdminClass');
+    curl_setopt($ch, CURLOPT_HEADER , 0);
+    curl_setopt($ch, CURLOPT_COOKIEJAR , 'cookie.txt');
+    curl_setopt($ch, CURLOPT_COOKIEFILE , 'cookie.txt');
+    curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER , 1);
+    $data = curl_exec($ch);
+		if(empty($data)) {
+			throw new Exception('No content');
+		}
+		curl_close($ch);
+		$data = json_decode($data);
+	  return $data;
+	}
 }
 
 class mcmyadminCmd extends cmd {
@@ -200,74 +395,10 @@ class mcmyadminCmd extends cmd {
       $info = $eqlogic->getstatus(); //On lance la fonction getstatus() pour récupérer une vdm et on la stocke dans la variable $info
       $eqlogic->checkAndUpdateCmd('status', $info); //on met à jour la commande avec le LogicalId "story"  de l'eqlogic
       break;
+
     }
   }
 
-  public function getstatus() {
-    $adresse = $this->getConfiguration("adresse", "localhost");
-    $port = $this->getConfiguration("port", "8080");
-    $utilisateur = $this->getConfiguration("utilisateur", "admin");
-    $password = $this->getConfiguration("password", "admin");
-    $url = "http://" . $adresse . ":" . $port . "/data.json?req=login&Username=" . $utilisateur . "&Password=" . $password . "&Token=";
-    return $url;
-    /*
-    $this->setConfiguration("sessionid","mon_type");
-    $opts = array(
-      'http'=>array(
-        'method'=>"GET",
-        'header'=>"Content-Type: application/json\r\n" .
-                  "Accept: application/json\r\n"
-      )
-    );
-    $context = stream_context_create($opts);
-    $url = "http://" . $adresse . ":" . $port . "/data.json?req=login&Username=" . $utilisateur . "&Password=" . $password . "&Token=";
-    $data = file_get_contents($url, false, $context);
-    @$dom = new DOMDocument();
-    libxml_use_internal_errors(true);
-    $dom->loadHTML($data);
-    libxml_use_internal_errors(false);
-    $xpath = new DOMXPath($dom);
-    $divs = $xpath->query('//article[@class="art-panel col-xs-12"]//div[@class="panel-content"]//p//a');
-    return $divs[0]->nodeValue ;
-    */
-  }
 
   /*     * **********************Getteur Setteur*************************** */
-  /*
-  import requests
-  import json
-  data = {}
-  headers = {
-      "Content-Type": "application/json",
-    "Accept": "application/json"
-  }
-  url = "http://192.168.2.55:8080/data.json?req=login&Username=admin&Password=pass123&Token="
-  response = requests.get(url, json=data, headers=headers)
-  if response.status_code == 200:
-    data = json.loads(response.text)
-    url = "http://192.168.2.55:8080/data.json?req=getstatus&Username=admin&Password=pass123&MCMASESSIONID=" + data["MCMASESSIONID"]
-    response = requests.get(url, json=data, headers=headers)
-    if response.status_code == 200:
-      data = json.loads(response.text)
-      
-      {
-      'status': 200,
-      'state': 0,
-      'failed': False,
-      'failmsg': None,
-      'maxram': 2048,
-      'users': 0,
-      'maxusers': 10,
-      'userinfo': {},
-      'time': '2023-02-18 18:59:30',
-      'ram': 0,
-      'starttime': '[Not Running]',
-      'uptime': None,
-      'cpuusage': 0
-      }
-      jeedom send data
-      
-      url = "http://192.168.2.55:8080/data.json?req=logout&Username=admin&Password=pass123&MCMASESSIONID=" + data["MCMASESSIONID"]
-      response = requests.get(url, json=data, headers=headers)
-      */
 }
