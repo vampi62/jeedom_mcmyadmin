@@ -104,28 +104,50 @@ class mcmyadmin extends eqLogic {
   }
 
   // Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement
+  private function create_element($newcmd,$newname,$newtype,$newsubtype){
+    $newelement = $this->getCmd(null, $newcmd);
+    if (!is_object($newelement)) {
+      $newelement = new mcmyadminCmd();
+      $newelement->setName(__($newname, __FILE__));
+    }
+    $newelement->setEqLogic_id($this->getId());
+    $newelement->setLogicalId($newcmd);
+    $newelement->setType($newtype);
+    $newelement->setSubType($newsubtype);
+    $newelement->save();
+  }
+
   public function postSave() {
-    $status = $this->getCmd(null, 'status');
-    if (!is_object($info)) {
-      $status = new mcmyadminCmd();
-      $status->setName(__('Status', __FILE__));
-    }
-    $status->setEqLogic_id($this->getId());
-    $status->setLogicalId('status');
-    $status->setType('info');
-    $status->setSubType('string');
-    $status->save();
-  
-    $refresh = $this->getCmd(null, 'refresh');
-    if (!is_object($refresh)) {
-      $refresh = new mcmyadminCmd();
-      $refresh->setName(__('Rafraichir', __FILE__));
-    }
-    $refresh->setEqLogic_id($this->getId());
-    $refresh->setLogicalId('refresh');
-    $refresh->setType('action');
-    $refresh->setSubType('other');
-    $refresh->save();
+    $this->create_element('refresh','Rafraichir','action','other');
+    $this->create_element('sleepserver','sleep','action','other');
+    $this->create_element('startserver','start','action','other');
+    $this->create_element('stopserver','stop','action','other');
+    $this->create_element('killserver','kill','action','other');
+    $this->create_element('reload','reload','action','other');
+    $this->create_element('restartserver','restart','action','other');
+
+
+    $this->create_element('message_chat','message_chat','info','string');
+    $this->create_element('refresh_chat','refresh_chat','action','other');
+    $this->create_element('sendchat','send','action','action');
+    $this->create_element('chat','chat','info','string');
+    $this->create_element('chattimestamp','chattimestamp','info','string');
+    
+    $this->create_element('state','state','info','string');
+    $this->create_element('failed','failed','info','string');
+    $this->create_element('failmsg','failmsg','info','string');
+    $this->create_element('maxram','maxram','info','string');
+    $this->create_element('users','users','info','string');
+    $this->create_element('maxusers','maxusers','info','string');
+    $this->create_element('userinfo','userinfo','info','string');
+    $this->create_element('time','time','info','string');
+    $this->create_element('ram','ram','info','string');
+    $this->create_element('starttime','starttime','info','string');
+    $this->create_element('uptime','uptime','info','string');
+    $this->create_element('cpuusage','cpuusage','info','string');
+    
+    $this->create_element('backend','backend','info','string');
+    $this->create_element('mc','mc','info','string');
   }
 
   // Fonction exécutée automatiquement avant la suppression de l'équipement
@@ -170,202 +192,44 @@ class mcmyadmin extends eqLogic {
   */
 
   /*     * **********************Getteur Setteur*************************** */
-
-
-
-  public function getstgatus() {
-    $adresse = $this->getConfiguration("adresse", "localhost");
-    $port = $this->getConfiguration("port", "8080");
-    $utilisateur = $this->getConfiguration("utilisateur", "admin");
-    $password = $this->getConfiguration("password", "admin");
-    $url = "http://" . $adresse . ":" . $port . "/data.json?req=login&Username=" . $utilisateur . "&Password=" . $password . "&Token=";
-    return $url;
-    /*
-    $this->setConfiguration("sessionid","mon_type");
-    $opts = array(
-      'http'=>array(
-        'method'=>"GET",
-        'header'=>"Content-Type: application/json\r\n" .
-                  "Accept: application/json\r\n"
-      )
-    );
-    $context = stream_context_create($opts);
-    $url = "http://" . $adresse . ":" . $port . "/data.json?req=login&Username=" . $utilisateur . "&Password=" . $password . "&Token=";
-    $data = file_get_contents($url, false, $context);
-    @$dom = new DOMDocument();
-    libxml_use_internal_errors(true);
-    $dom->loadHTML($data);
-    libxml_use_internal_errors(false);
-    $xpath = new DOMXPath($dom);
-    $divs = $xpath->query('//article[@class="art-panel col-xs-12"]//div[@class="panel-content"]//p//a');
-    return $divs[0]->nodeValue ;
-    */
-  }
-
-
-	public function getFullConfig () {
-		return $this->request(array('req' => 'getfullconfig'));
+  
+	public function getStatusServ($url) {
+		$status =  $this->request($url . "&req=getstatus");
+		$version =  $this->request($url . "&req=getversions");
+    return array($status,$version);
 	}
-	public function getBackupStatus () {
-		return $this->request(array('req' => 'getbackupstatus'));
-	}
-	public function getDeleteStatus () {
-		return $this->request(array('req' => 'getdeletestatus'));
-	}
-	public function getRestoreStatus () {
-		return $this->request(array('req' => 'getrestorestatus'));
-	}
-	public function getUpdateStatus () {
-		return $this->request(array('req' => 'getupdatestatus'));
-	}
-	public function getStatus () {
-		return $this->request(array('req' => 'getstatus'));
-	}
-	public function getExtensions () {
-		return $this->request(array('req' => 'getextensions'));
-	}
-	public function getPlugins () {
-		return $this->request(array('req' => 'getplugins'));
-	}
-	public function getProviderInfo () {
-		return $this->request(array('req' => 'getproviderinfo'));
-	}
-	public function getServerInfo () {
-		return $this->request(array('req' => 'getserverinfo'));
-	}
-	public function getTip () {
-		return $this->request(array('req' => 'gettip'));
-	}
-	public function getVersions () {
-		return $this->request(array('req' => 'getversions'));
-	}
-	public function getBackupList () {
-		return $this->request(array('req' => 'getbackuplist'));
-	}
-  public function getPlayers() {
-    $request = $this->getStatus();
-    $playerlist = array();
-    if(isset($request->userinfo)) {
-      foreach($request->userinfo as $user => $values) {
-          $playerlist[] = $user;
-        }
-    }
-    return $playerlist;
-	}
-
-	public function getConfig ($key) {
-		if($key) {
-      return $this->request(array('req' => 'getconfig' , 'key' => $key));
-		}
-	}
-	public function getChat ($since) {
+	public function getChat($url,$since) {
 		if($since) {
-      return $this->request(array('req' => 'getchat' , 'since' => $since));
+      return $this->request($url . "&req=getchat&since=" . $since);
 		}
 	}
 
-
-
-	public function setConfig ($key, $value) {
-		if($key && $value) {
-      return $this->request(array('req' => 'setconfig' , 'key' => $key, 'value' => $value));
-		}
-	}
-	public function sendChat ($message) {
+	public function sendChat($url,$message) {
 		if($message) {
-      return $this->request(array('req' => 'sendchat' , 'message' => $message));
+      return $this->request($url . "&req=sendchat&message=" . $message);
 		}
 	}
-
-
-
-  public function sleepServer () {
-    return $this->request(array('req' => 'sleepserver'));
+  public function exec_command($url,$commandname) {
+    return $this->request($url . "&req=" . $commandname);
   }
-  public function startServer () {
-    return $this->request(array('req' => 'startserver'));
-  }
-  public function stopServer () {
-    return $this->request(array('req' => 'stopserver'));
-  }
-	public function killServer () {
-		return $this->request(array('req' => 'killserver'));
-	}
-	public function reload () {
-		return $this->request(array('req' => 'reload'));
-	}
-	public function restartServer () {
-		return $this->request(array('req' => 'restartserver'));
-	}
-  public function updateMC () {
-    return $this->request(array('req' => 'updatemc'));
-  }
-  public function updateMCMA () {
-    return $this->request(array('req' => 'updatemcma'));
-  }
-
-
-  public function doDiagnostics () {
-		return $this->request(array('req' => 'dodiagnostics'));
-	}
-	public function logout () {
-		return $this->request(array('req' => 'logout'));
-	}
-	public function getTokenAuth ($username) {
-		if($username) {
-      return $this->request(array('req' => 'gettokenauth' , 'username' => $username));
-		}
-	}
-	public function login($user = 'admin',$pass = '',$host = 'localhost',$port = '8080') {
-		if(!empty($user) && !empty($pass) && !empty($host) && !empty($port)) {
-			$request = $this->request(array('req'=>'login', 'Username'=>$user, 'Password'=>$pass));
-            if (isset($request->MCMASESSIONID)) {
-                $this->session_id = $request->MCMASESSIONID;
-            }
-			if($request->success == 1){
-				$this->logged_in = true;
-			} else {
-				throw new Exception('Incorrect config details');
-			}
-		} else {
-			throw new Exception('Not enough Paramters');
-		}
-	}
-
-
-  private function request($args = array()) {
-		if(empty($this->config['host']) || empty($this->config['port'])) {
-			throw new Exception('No host or port has been given');
-		}
-    if (isset($this->session_id)) {
-      $args['MCMASESSIONID'] = $this->session_id;
-    } else {
-        $args['Token'] = '';
+  
+  public function login($url) {
+    $result = $this->request($url . "&req=login" . "&Token=");
+    if($result['status'] == 200){
+      return $result['MCMASESSIONID'];
     }
-    $param = '';
-		if(!empty($args)) {
-			$param = http_build_query($args);
-		}
-    $protocol = 'http';
-    $protocol = 'https';
-    $url = $protocol . '://' . $this->config['host'] . ':' . $this->config['port'] . '/data.json?' . $param;
-		$ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_HTTPHEADER , array('Content-type: application/json','Accept: application/json'));
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION , 1);
-    curl_setopt($ch, CURLOPT_USERAGENT, 'Firefox/mozilla McMyAdminClass');
-    curl_setopt($ch, CURLOPT_HEADER , 0);
-    curl_setopt($ch, CURLOPT_COOKIEJAR , 'cookie.txt');
-    curl_setopt($ch, CURLOPT_COOKIEFILE , 'cookie.txt');
-    curl_setopt($ch, CURLINFO_HEADER_OUT, true);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER , 1);
-    $data = curl_exec($ch);
-		if(empty($data)) {
-			throw new Exception('No content');
-		}
-		curl_close($ch);
-		$data = json_decode($data);
-	  return $data;
-	}
+    return "";
+  }
+  public function request($url) {
+    log::add('mcmyadmin','debug',$url);
+    $request_http = new com_http($url);
+    $request_http->setHeader(array('Content-type: application/json','Accept: application/json'));
+    $result=$request_http->exec();
+    log::add('mcmyadmin','debug',$result);
+    $result = json_decode($result,true);
+    return $result;
+  }
+  protected $retrylogin = true;
 }
 
 class mcmyadminCmd extends cmd {
@@ -390,12 +254,88 @@ class mcmyadminCmd extends cmd {
   // Exécution d'une commande
   public function execute($_options = array()) {
     $eqlogic = $this->getEqLogic(); //récupère l'éqlogic de la commande $this
+    $adresse = $eqlogic->getConfiguration("adresse", "localhost");
+    $port = $eqlogic->getConfiguration("port", "8080");
+    $utilisateur = $eqlogic->getConfiguration("utilisateur", "admin");
+    $password = $eqlogic->getConfiguration("password", "admin");
+    $protocol = $eqlogic->getConfiguration("protocol", "http");
+    $chattimestamp = $eqlogic->getConfiguration("chattimestamp", "");
+    
+    $args = array();
+    $args['Username'] = $utilisateur;
+    $args['Password'] = $password;
+    $param = http_build_query($args);
+    $url = $protocol . '://' . $adresse . ':' . $port . '/data.json?' . $param;
+    $MCMASESSIONID = $eqlogic->login($url); // login si pas de token
+    if($MCMASESSIONID == "") {
+      return false;
+    }
     switch ($this->getLogicalId()) { //vérifie le logicalid de la commande
-      case 'refresh': // LogicalId de la commande rafraîchir que l’on a créé dans la méthode Postsave de la classe vdm .
-      $info = $eqlogic->getstatus(); //On lance la fonction getstatus() pour récupérer une vdm et on la stocke dans la variable $info
-      $eqlogic->checkAndUpdateCmd('status', $info); //on met à jour la commande avec le LogicalId "story"  de l'eqlogic
+      case 'refresh':
+        
+        $info = $eqlogic->getStatusServ($url . "&MCMASESSIONID=" . $MCMASESSIONID);
+        if ($info[0]['status'] != 200) {
+          break;
+        }
+        $playerlist = array();
+        if(isset($info[0]->userinfo)) {
+          foreach($info[0]->userinfo as $user => $values) {
+              $playerlist[] = $user;
+            }
+        }
+        $eqlogic->checkAndUpdateCmd('state', $info[0]['state']);
+        $eqlogic->checkAndUpdateCmd('failed', $info[0]['failed']);
+        $eqlogic->checkAndUpdateCmd('failmsg', $info[0]['failmsg']);
+        $eqlogic->checkAndUpdateCmd('maxram', $info[0]['maxram']);
+        $eqlogic->checkAndUpdateCmd('maxusers', $info[0]['maxusers']);
+        $eqlogic->checkAndUpdateCmd('userinfo', $info[0]['userinfo']);
+        $eqlogic->checkAndUpdateCmd('time', $info[0]['time']);
+        $eqlogic->checkAndUpdateCmd('ram', $info[0]['ram']);
+        $eqlogic->checkAndUpdateCmd('starttime', $info[0]['starttime']);
+        $eqlogic->checkAndUpdateCmd('uptime', $info[0]['uptime']);
+        $eqlogic->checkAndUpdateCmd('cpuusage', $info[0]['cpuusage']);
+        
+        if ($info[1]['status'] != 200) {
+          break;
+        }
+        $eqlogic->checkAndUpdateCmd('backend', $info[1]['backend']);
+        $eqlogic->checkAndUpdateCmd('mc', $info[1]['mc']);
+      case 'refresh_chat': // exec commande si refresh_chat ou refresh
+        if ($chattimestamp < 10) {
+          $chattimestamp = 0;
+        }
+        else {
+          $chattimestamp = $chattimestamp - 10;
+        }
+        $info = $eqlogic->getChat($url . "&MCMASESSIONID=" . $MCMASESSIONID,$chattimestamp);
+        if ($info[0]['status'] != 200) {
+          break;
+        }
+        $chatlist = array();
+        if(isset($info->chatdata)) {
+          for($j = 0; $j < count($info->chatdata); $j++) {
+            if ($info->chatdata[$j]->isChat) {
+              $chatlist[] = $info->chatdata[$j]->user . ' : ' . $info->chatdata[$j]->message . ' (' . $info->chatdata[$j]->time . ')';
+            }
+          }
+        }
+        implode(" ", $chatlist);
+        $eqlogic->checkAndUpdateCmd('chat', $chatlist);
+        $eqlogic->checkAndUpdateCmd('chattimestamp', $info["timestamp"]);
       break;
+      case 'sendchat':
+        $info = $eqlogic->sendChat($url . "&MCMASESSIONID=" . $MCMASESSIONID,$message);
+        if ($info[0]['status'] != 200) {
 
+          break;
+        }
+      break;
+      default:
+        $eqlogic->exec_command($url . "&MCMASESSIONID=" . $MCMASESSIONID,$this->getLogicalId());
+        if ($info[0]['status'] != 200) {
+          break;
+        }
+      break;
     }
   }
 

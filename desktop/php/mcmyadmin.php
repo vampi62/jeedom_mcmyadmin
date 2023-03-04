@@ -159,6 +159,14 @@ $eqLogics = eqLogic::byType($plugin->getId());
 									<input type="text" class="eqLogicAttr form-control inputPassword" data-l1key="configuration" data-l2key="password">
 								</div>
 							</div>
+							<div class="form-group">
+								<label class="col-sm-4 control-label"> {{protocole}}
+									<sup><i class="fas fa-question-circle tooltips" title="{{ entrer le protocole utiliser : http ou https}}"></i></sup>
+								</label>
+								<div class="col-sm-6">
+									<input type="text" class="eqLogicAttr form-control inputPassword" data-l1key="configuration" data-l2key="protocol">
+								</div>
+							</div>
 						</div>
 
 						<!-- Partie droite de l'onglet "Équipement" -->
