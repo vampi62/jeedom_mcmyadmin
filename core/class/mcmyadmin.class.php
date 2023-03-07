@@ -106,16 +106,14 @@ class mcmyadmin extends eqLogic {
   // Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement
   public function set_limit_element($cmd,$mini,$maxi){
     $element = $this->getCmd(null, $cmd);
-    if (!is_object($element)) {
-      return false;
+    if (is_object($element)) {
+      if (($element->getConfiguration('maxValue', "") != $maxi) || ($element->getConfiguration('minValue', "") != $mini)) {
+        $element->setConfiguration('maxValue', $maxi);
+        $element->setConfiguration('minValue', $mini);
+        $element->save();
+      }
     }
-    if ($element->getConfiguration('maxValue', $value))
-    $element->setConfiguration('maxValue', $maxi);
-    $element->getConfiguration('minValue', $mini);
-    $element->setEqLogic_id($this->getId());
-    $element->save();
   }
-
 
   // Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement
   private function create_element($newcmd,$newname,$newtype,$newsubtype){
@@ -123,12 +121,12 @@ class mcmyadmin extends eqLogic {
     if (!is_object($newelement)) {
       $newelement = new mcmyadminCmd();
       $newelement->setName(__($newname, __FILE__));
-      $newelement->setEqLogic_id($this->getId());
-      $newelement->setLogicalId($newcmd);
-      $newelement->setType($newtype);
-      $newelement->setSubType($newsubtype);
-      $newelement->save();
     }
+    $newelement->setEqLogic_id($this->getId());
+    $newelement->setLogicalId($newcmd);
+    $newelement->setType($newtype);
+    $newelement->setSubType($newsubtype);
+    $newelement->save();
   }
 
   public function postSave() {
@@ -140,16 +138,18 @@ class mcmyadmin extends eqLogic {
     $this->create_element('reload','reload','action','other');
     $this->create_element('restartserver','restart','action','other');
     $this->create_element('refresh_chat','refresh_chat','action','other');
+    $this->create_element('refresh_version','refresh_version','action','other');
 
     $this->create_element('sendchat','send','action','message');
     $this->create_element('chat','chat','info','string');
+    $this->create_element('chatoffset','chatoffset','info','numeric');
 
-    $this->create_element('cpuusage','cpuusage','info','string');
-    $this->create_element('ram','ram','info','string');
+    $this->create_element('cpuusage','cpuusage','info','numeric');
+    $this->create_element('ram','ram','info','numeric');
     $this->create_element('users','users','info','string');
 
     $this->create_element('state','state','info','string');
-
+    
 
     $this->create_element('failed','failed','info','string');
     $this->create_element('failmsg','failmsg','info','string');
@@ -204,17 +204,17 @@ class mcmyadmin extends eqLogic {
 
   /*     * **********************Getteur Setteur*************************** */
   
-	public function getStatusServ($url) {
-		$status =  $this->request($url . "&req=getstatus");
-		$version =  $this->request($url . "&req=getversions");
-    return array($status,$version);
+	public function getmcStatus($url) {
+		return $this->request($url . "&req=getstatus");
+	}
+	public function getmcVersion($url) {
+		return $this->request($url . "&req=getversions");
 	}
 	public function getChat($url,$since) {
 		if($since >= 0) {
       return $this->request($url . "&req=getchat&since=" . $since);
 		}
 	}
-
 	public function sendChat($url,$message) {
 		if($message) {
       return $this->request($url . "&req=sendchat&message=" . $message);
@@ -232,12 +232,12 @@ class mcmyadmin extends eqLogic {
     return "";
   }
   public function request($url) {
-    log::add('mcmyadmin','debug',$url);
     $request_http = new com_http($url);
     $request_http->setHeader(array('Content-type: application/json','Accept: application/json'));
     $result=$request_http->exec();
-    log::add('mcmyadmin','debug',$result);
     $result = json_decode($result,true);
+    log::add('mcmyadmin','debug',$url);
+    log::add('mcmyadmin','debug',$result);
     return $result;
   }
   protected $retrylogin = true;
@@ -270,8 +270,7 @@ class mcmyadminCmd extends cmd {
     $utilisateur = $eqlogic->getConfiguration("utilisateur", "admin");
     $password = $eqlogic->getConfiguration("password", "admin");
     $protocol = $eqlogic->getConfiguration("protocol", "http");
-    $chattimestamp = $eqlogic->getConfiguration("chattimestamp", 0);
-    
+    $chatoffset = $eqlogic->getConfiguration("chatoffset", 0);
     $args = array();
     $args['Username'] = $utilisateur;
     $args['Password'] = $password;
@@ -289,49 +288,48 @@ class mcmyadminCmd extends cmd {
           break;
         }
         sleep(5); // on attend 5 secondes pour laisser le temps au serveur de traiter la commande
+      //break; // pas de break pour executer refresh
       case 'refresh':
-        $info = $eqlogic->getStatusServ($url . "&MCMASESSIONID=" . $MCMASESSIONID);
-        if ($info[0]['status'] != 200) {
+        $info = $eqlogic->getmcStatus($url . "&MCMASESSIONID=" . $MCMASESSIONID);
+        if ($info['status'] != 200) {
           break;
         }
         $playerlist = array();
-        if(count($info[0]['userinfo']) > 0) {
-          foreach($info[0]['userinfo'] as $user => $values) {
+        if(count($info['userinfo']) > 0) {
+          foreach($info['userinfo'] as $user => $values) {
             $playerlist[] = $values['Name'] . " : " . $values['IP'] . " : " . date("Y-m-d H:i:s", substr($values['ConnectTime'],6,-2));
           }
         }
-        $eqlogic->checkAndUpdateCmd('state', $info[0]['state']);
-        $eqlogic->checkAndUpdateCmd('failed', $info[0]['failed']);
-        $eqlogic->checkAndUpdateCmd('failmsg', $info[0]['failmsg']);
-        $eqlogic->set_limit_element('users',0,$info[0]['maxusers']);
-        $eqlogic->checkAndUpdateCmd('users', count($info[0]['userinfo']));
+        $eqlogic->checkAndUpdateCmd('state', $info['state']);
+        $eqlogic->checkAndUpdateCmd('failed', $info['failed']);
+        $eqlogic->checkAndUpdateCmd('failmsg', $info['failmsg']);
+        $eqlogic->set_limit_element('users',0,$info['maxusers']);
+        $eqlogic->checkAndUpdateCmd('users', count($info['userinfo']));
         $playerlist = implode("<br/>", $playerlist);
         $eqlogic->checkAndUpdateCmd('userinfo', $playerlist);
-        $eqlogic->checkAndUpdateCmd('time', $info[0]['time']);
-        $eqlogic->set_limit_element('ram',0,$info[0]['maxram']);
-        $eqlogic->checkAndUpdateCmd('ram', $info[0]['ram']);
-        $eqlogic->checkAndUpdateCmd('starttime', $info[0]['starttime']);
-        $eqlogic->checkAndUpdateCmd('cpuusage', $info[0]['cpuusage']);
-        if ($info[1]['status'] != 200 && $info[1]['status'] != 500) { // 500 = ?bug api mais retour data
+        $eqlogic->checkAndUpdateCmd('time', $info['time']);
+        $eqlogic->set_limit_element('ram',0,$info['maxram']);
+        $eqlogic->checkAndUpdateCmd('ram', $info['ram']);
+        $eqlogic->checkAndUpdateCmd('starttime', $info['starttime']);
+        $eqlogic->checkAndUpdateCmd('cpuusage', $info['cpuusage']);
+      //break; // pas de break pour executer refresh_version
+      case 'refresh_version':
+        $info = $eqlogic->getmcVersion($url . "&MCMASESSIONID=" . $MCMASESSIONID);
+        if ($info['status'] != 200 && $info['status'] != 500) { // 500 = ?bug api mais retour data
           break;
         }
-        $eqlogic->checkAndUpdateCmd('backend', $info[1]['backend']);
-        $eqlogic->checkAndUpdateCmd('mc', $info[1]['mc']);
+        $eqlogic->checkAndUpdateCmd('backend', $info['backend']);
+        $eqlogic->checkAndUpdateCmd('mc', $info['mc']);
+      break;
       case 'refresh_chat': // exec commande si refresh_chat ou refresh
-        log::add('mcmyadmin','debug',$chattimestamp);
-        if ($chattimestamp < 10) {
-          $chattimestamp = 0;
-        }
-        else {
-          $chattimestamp = $chattimestamp - 10;
-        }
-        $info = $eqlogic->getChat($url . "&MCMASESSIONID=" . $MCMASESSIONID,$chattimestamp);
+        $info = $eqlogic->getChat($url . "&MCMASESSIONID=" . $MCMASESSIONID,$this->editchatoffset($chatoffset));
         if ($info['status'] != 200) {
           break;
         }
         $chatlist = array();
         if(isset($info['chatdata'])) {
-          for($j = 0; $j < count($info['chatdata']); $j++) {
+          $min_chat_offset = $this->editchatoffset(count($info['chatdata']));
+          for($j = $min_chat_offset; $j < count($info['chatdata']); $j++) {
             if ($info['chatdata'][$j]['isChat']) {
               $chatlist[] = $info['chatdata'][$j]['user'] . ' : ' . $info['chatdata'][$j]['message'] . ' : ' . date("Y-m-d H:i:s", substr($info['chatdata'][$j]['time'],6,-2));
             }
@@ -339,41 +337,38 @@ class mcmyadminCmd extends cmd {
         }
         $chatlist = implode("<br/>", $chatlist);
         $eqlogic->checkAndUpdateCmd('chat', $chatlist);
-        $eqlogic->setConfiguration("chattimestamp", $info["timestamp"]);
-        $eqlogic->save();
+        $eqlogic->checkAndUpdateCmd("chatoffset", $this->editchatoffset($info["timestamp"]));
+        if ($info["timestamp"] < $chatoffset) {
+          $cmd = $mcmyadmin->getCmd(null, 'refresh_chat'); //retourne la commande "refresh_chat" si elle existe
+          if (!is_object($cmd)) { //Si la commande n'existe pas
+            break;
+          }
+          $cmd->execCmd(); // rechargement du chat avec le nouveau message
+        }
       break;
       case 'sendchat':
         $info = $eqlogic->sendChat($url . "&MCMASESSIONID=" . $MCMASESSIONID,$_options['message']);
         if ($info['status'] != 200) {
           break;
         }
-        sleep(1);
-        if ($chattimestamp < 10) {
-          $chattimestamp = 0;
-        }
-        else {
-          $chattimestamp = $chattimestamp - 10;
-        }
-        $info = $eqlogic->getChat($url . "&MCMASESSIONID=" . $MCMASESSIONID,$chattimestamp);
-        if ($info['status'] != 200) {
+        sleep(1); // on attend 1 seconde pour laisser le temps au serveur de traiter la commande
+        $cmd = $mcmyadmin->getCmd(null, 'refresh_chat'); //retourne la commande "refresh_chat" si elle existe
+        if (!is_object($cmd)) { //Si la commande n'existe pas
           break;
         }
-        $chatlist = array();
-        if(isset($info['chatdata'])) {
-          for($j = 0; $j < count($info['chatdata']); $j++) {
-            if ($info['chatdata'][$j]['isChat']) {
-              $chatlist[] = $info['chatdata'][$j]['user'] . ' : ' . $info['chatdata'][$j]['message'] . ' : ' . date("Y-m-d H:i:s", substr($info['chatdata'][$j]['time'],6,-2));
-            }
-          }
-        }
-        $chatlist = implode("<br/>", $chatlist);
-        $eqlogic->checkAndUpdateCmd('chat', $chatlist);
-        $eqlogic->setConfiguration("chattimestamp", $info["timestamp"]);
-        $eqlogic->save();
+        $cmd->execCmd(); // rechargement du chat avec le nouveau message
       break;
     }
   }
-
+  private function editchatoffset($chatoffset){
+    if ($chatoffset < 10) { // limite le chatoffset pour n'importer que les 10 derniers messages
+      $chatoffset = 0;
+    }
+    else {
+      $chatoffset = $chatoffset - 10;
+    }
+    return $chatoffset;
+  }
 
   /*     * **********************Getteur Setteur*************************** */
 }
