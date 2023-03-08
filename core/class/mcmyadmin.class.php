@@ -39,44 +39,19 @@ class mcmyadmin extends eqLogic {
   * Fonction exécutée automatiquement toutes les minutes par Jeedom
   */
   public static function cron() {
-    foreach (self::byType('mcmyadmin', true) as $mcmyadmin) { //parcours tous les équipements actifs du plugin vdm
-      $cmd = $mcmyadmin->getCmd(null, 'refresh'); //retourne la commande "refresh" si elle existe
-      if (!is_object($cmd)) { //Si la commande n'existe pas
-        continue; //continue la boucle
+    foreach (self::byType('mcmyadmin', true) as $mcmyadmin) { //parcours tous les équipements actifs du plugin
+      $cmd = $mcmyadmin->getCmd(null, 'refresh');
+      if (!is_object($cmd)) {
+        continue;
       }
-      $cmd->execCmd(); //la commande existe on la lance
+      $cmd->execCmd();
+      $cmd = $mcmyadmin->getCmd(null, 'refresh_chat');
+      if (!is_object($cmd)) {
+        continue;
+      }
+      $cmd->execCmd();
     }
   }
-  /*
-  * Fonction exécutée automatiquement toutes les 5 minutes par Jeedom
-  public static function cron5() {}
-  */
-
-  /*
-  * Fonction exécutée automatiquement toutes les 10 minutes par Jeedom
-  public static function cron10() {}
-  */
-
-  /*
-  * Fonction exécutée automatiquement toutes les 15 minutes par Jeedom
-  public static function cron15() {}
-  */
-
-  /*
-  * Fonction exécutée automatiquement toutes les 30 minutes par Jeedom
-  public static function cron30() {}
-  */
-
-  /*
-  * Fonction exécutée automatiquement toutes les heures par Jeedom
-  public static function cronHourly() {}
-  */
-
-  /*
-  * Fonction exécutée automatiquement tous les jours par Jeedom
-  public static function cronDaily() {}
-  */
-
   /*     * *********************Méthodes d'instance************************* */
 
   // Fonction exécutée automatiquement avant la création de l'équipement
@@ -93,10 +68,6 @@ class mcmyadmin extends eqLogic {
 
   // Fonction exécutée automatiquement après la mise à jour de l'équipement
   public function postUpdate() {
-  //  $cmd = $this->getCmd(null, 'refresh'); //On recherche la commande refresh de l’équipement
-  //  if (is_object($cmd)) { //elle existe et on lance la commande
-  //    $cmd->execCmd();
-  //  }
   }
 
   // Fonction exécutée automatiquement avant la sauvegarde (création ou mise à jour) de l'équipement
@@ -116,7 +87,7 @@ class mcmyadmin extends eqLogic {
   }
 
   // Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement
-  private function create_element($newcmd,$newname,$newtype,$newsubtype){
+  private function create_element($newcmd,$newname,$newtype,$newsubtype,$newtemplate = 'default'){
     $newelement = $this->getCmd(null, $newcmd);
     if (!is_object($newelement)) {
       $newelement = new mcmyadminCmd();
@@ -126,6 +97,7 @@ class mcmyadmin extends eqLogic {
     $newelement->setLogicalId($newcmd);
     $newelement->setType($newtype);
     $newelement->setSubType($newsubtype);
+    $newelement->setTemplate('dashboard',$newtemplate);
     $newelement->save();
   }
 
@@ -143,10 +115,21 @@ class mcmyadmin extends eqLogic {
     $this->create_element('sendchat','send','action','message');
     $this->create_element('chat','chat','info','string');
     $this->create_element('chatoffset','chatoffset','info','numeric');
+    $element = $this->getCmd(null, 'chatoffset');
+    if (is_object($element)) {
+      $element->setIsVisible(0);
+      $element->save();
+    }
 
     $this->create_element('cpuusage','cpuusage','info','numeric');
     $this->create_element('ram','ram','info','numeric');
     $this->create_element('users','users','info','string');
+    $this->set_limit_element('users',0,100);
+    $element = $this->getCmd(null, 'sendchat');
+    if (is_object($element)) {
+      $element->setDisplay('title_disable', '1');
+      $element->save();
+    }
 
     $this->create_element('state','state','info','string');
     
