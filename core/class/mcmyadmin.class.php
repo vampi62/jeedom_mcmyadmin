@@ -280,15 +280,18 @@ class mcmyadminCmd extends cmd {
         $playerlist = array();
         if(count($info['userinfo']) > 0) {
           foreach($info['userinfo'] as $user => $values) {
-            $playerlist[] = $values['Name'] . " : " . $values['IP'] . " : " . date("Y-m-d H:i:s", substr($values['ConnectTime'],6,-2));
+            $playerlist[] = $values['Name'] . " : " . $values['IP'] . " : " . date("Y-m-d H:i:s", substr($values['ConnectTime'],6,-5));
           }
         }
+        else {
+          $playerlist[] = "aucun joueur connecté";
+        }
+        $playerlist = implode("<br/>", $playerlist);
         $eqlogic->checkAndUpdateCmd('state', $info['state']);
         $eqlogic->checkAndUpdateCmd('failed', $info['failed']);
         $eqlogic->checkAndUpdateCmd('failmsg', $info['failmsg']);
         $eqlogic->set_limit_element('users',0,$info['maxusers']);
         $eqlogic->checkAndUpdateCmd('users', count($info['userinfo']));
-        $playerlist = implode("<br/>", $playerlist);
         $eqlogic->checkAndUpdateCmd('userinfo', $playerlist);
         $eqlogic->checkAndUpdateCmd('time', $info['time']);
         $eqlogic->set_limit_element('ram',0,$info['maxram']);
@@ -305,22 +308,30 @@ class mcmyadminCmd extends cmd {
         $eqlogic->checkAndUpdateCmd('mc', $info['mc']);
       break;
       case 'refresh_chat': // exec commande si refresh_chat ou refresh
-        $info = $eqlogic->getChat($url . "&MCMASESSIONID=" . $MCMASESSIONID,$this->editchatoffset($chatoffset));
+        $info = $eqlogic->getChat($url . "&MCMASESSIONID=" . $MCMASESSIONID,$chatoffset);
         if ($info['status'] != 200) {
           break;
         }
         $chatlist = array();
         if(isset($info['chatdata'])) {
-          $min_chat_offset = $this->editchatoffset(count($info['chatdata']));
-          for($j = $min_chat_offset; $j < count($info['chatdata']); $j++) {
+          $nbr_chat_impr = 0;
+          $nbr_ligne_max = $this->getConfiguration("nbrchatlineshow", 10);
+          for($j = count($info['chatdata']); $j > 0; $j--) {
             if ($info['chatdata'][$j]['isChat']) {
-              $chatlist[] = $info['chatdata'][$j]['user'] . ' : ' . $info['chatdata'][$j]['message'] . ' : ' . date("Y-m-d H:i:s", substr($info['chatdata'][$j]['time'],6,-2));
+              $chatlist[] = $info['chatdata'][$j]['user'] . ' : ' . $info['chatdata'][$j]['message'] . ' : ' . date("Y-m-d H:i:s", substr($info['chatdata'][$j]['time'],6,-5));
+              $nbr_chat_impr++;
+              if ($nbr_chat_impr >= $nbr_ligne_max) {
+                $eqlogic->checkAndUpdateCmd("chatoffset", $info[$j]["timestamp"]);
+                break;
+              }
             }
+          }
+          if ($nbr_chat_impr < $nbr_ligne_max) {
+            $eqlogic->checkAndUpdateCmd("chatoffset", 0);
           }
         }
         $chatlist = implode("<br/>", $chatlist);
         $eqlogic->checkAndUpdateCmd('chat', $chatlist);
-        $eqlogic->checkAndUpdateCmd("chatoffset", $this->editchatoffset($info["timestamp"]));
         if ($info["timestamp"] < $chatoffset) {
           $cmd = $mcmyadmin->getCmd(null, 'refresh_chat'); //retourne la commande "refresh_chat" si elle existe
           if (!is_object($cmd)) { //Si la commande n'existe pas
@@ -342,15 +353,6 @@ class mcmyadminCmd extends cmd {
         $cmd->execCmd(); // rechargement du chat avec le nouveau message
       break;
     }
-  }
-  private function editchatoffset($chatoffset){
-    if ($chatoffset < 10) { // limite le chatoffset pour n'importer que les 10 derniers messages
-      $chatoffset = 0;
-    }
-    else {
-      $chatoffset = $chatoffset - 10;
-    }
-    return $chatoffset;
   }
 
   /*     * **********************Getteur Setteur*************************** */

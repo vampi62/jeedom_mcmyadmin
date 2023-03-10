@@ -25,11 +25,14 @@ if (!isConnect()) {
 <form class="form-horizontal">
   <fieldset>
     <div class="form-group">
-      <label class="col-md-4 control-label">{{lignes de chat à afficher}}
-        <sup><i class="fas fa-question-circle tooltips" title="{{Renseignez nombre de lignes visible dans le chat}}"></i></sup>
-      </label>
-      <div class="col-md-4">
-        <input class="configKey form-control" data-l1key="nbrchatlineshow"/>
+      <label class="col-md-2 control-label">{{nombre de ligne du chat à afficher}}</label>
+      <div class="col-sm-3">
+        <select id="sel_object_geo" class="configKey form-control" data-l1key="freq_geo">
+          <option value=5>5</option>
+          <option value=10>10</option>
+          <option value=15>15</option>
+          <option value=20>20</option>
+        </select>
       </div>
     </div>
   </fieldset>
