@@ -1,0 +1,181 @@
+<div class="eqLogic eqLogic-widget allowResize allowReorderCmd allowLayout #custom_layout# #eqLogic_class# #category#"
+      style="min-height: 150px;min-width:140px; position: relative; width:#width#; height:#height#;background-color:#background-color#!important; color:#color#; border:#border#; border-radius:#border-radius#;#style#"
+      data-eqType="#eqType#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-cat_color="#catcolore#"
+      data-version="#version#" data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#">
+ 
+ 
+
+		
+    <span class="statusCmd"></span>
+  <span class="cmd refresh pull-right cursor" data-cmd_id="#refresh_id#">
+		<i class="fas fa-sync"></i>
+  </span>
+  <center class="widget-name">
+    <a href="#eqLink#" style="#hideEqLogicName#">#name_display# <span class="object_name">#object_name#</span></a>
+  </center>
+
+	<script type="text/javascript">
+		$('.eqLogic[data-eqLogic_uid=#uid#] .refresh').on('click', function () {
+			//console.log("refresh_id: "   )
+		jeedom.cmd.execute({id: '#refresh_id#'});
+		});
+		$('.eqLogic[data-eqLogic_uid=#uid#]').ready(function(el) { 
+			//var el = $('.eqLogic[data-eqLogic_uid=#uid#]');
+			//$(this).stopPropagation();
+		// $(this).preventDefault();
+			catcolor = $('.eqLogic[data-eqLogic_uid=#uid#] .widget-name').css('background-color');
+			catcolor_a = catcolor.replace(')', ', 0.5)').replace('rgb', 'rgba');
+			//console.log("catcolor_a: " + catcolor_a);
+			$('.eqLogic[data-eqLogic_uid=#uid#]').closest('.eqLogic-widget').attr('data-cat_color', catcolor);				
+			eq_width = $('.eqLogic[data-eqLogic_uid=#uid#]').closest('.eqLogic-widget').css('width');
+			eq_height = $('.eqLogic[data-eqLogic_uid=#uid#]').closest('.eqLogic-widget').css('height');
+			cat_color = $('.eqLogic[data-eqLogic_uid=#uid#]').closest('.eqLogic-widget').attr('data-cat_color');
+			suv_color =$('.eqLogic[data-eqLogic_uid=#uid#]').attr('al-success-color');
+			console.log("suv_color: " + suv_color );
+			//console.log("cat-color: " + cat_color);
+			if ('#DefaultBgColor#' == "1" || '#DefaultBgColor#' == "") { 
+				$('.eqLogic[data-eqLogic_uid=#uid#]').css('background-color', 'rgba(86, 120, 182, 0.3)!important');
+				
+			}else{
+				$('.eqLogic[data-eqLogic_uid=#uid#]').css('background-color', '#background-color#!important');
+			}
+			if ('#active#' == '1' || '#active#' == 1) {
+				//console.log('etat: '+ '#etat#' + ' --color: ' + cat_color);
+				$('.eqLogic[data-eqLogic_uid=#uid#] .icon_active').css('color', cat_color + '!important');
+			$('.eqLogic[data-eqLogic_uid=#uid#] .etat').css('color', 'rgb(150, 201, 39)!important');
+			//#8ddb34
+			}
+		});
+	</script>
+	<div class="eq_body_#id#" >
+		<center>	
+			<div class="cmd cmd-widget " >
+				<div class="title ">
+					<div class="tooltips cmd cmd-widget #active_history#" data-subtype="other" data-type="info" data-cmd_id="#active_id#" data-eqlogic_id="#id#" title="Valeur du: #status_collectDate#" >
+					<span class="#imgtype# etat" style="margin-right: 5px;"> </span>
+					<span class="etat" style="font-size : 1.2em!important; font-weight: bold;"> #status#</span>
+					</div>
+				</div>
+			</div>
+			<div class="Pan_one">
+				<div class="tooltips cmd cmd-widget backend" data-type="info" data-subtype="numeric" data-cmd_id="#backend_id#" data-cmd_uid="cmd#backend#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #backend_collectDate#">
+					<div class="content-xs">
+						<span   class="cmdName">version mcmyadmin: </span>
+						<strong class="state">#backend#</strong>
+					</div>
+				</div>
+				<br/>
+				<div class="tooltips cmd cmd-widget mc" data-type="info" data-subtype="numeric" data-cmd_id="#mc_id#" data-cmd_uid="cmd#mc#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #mc_collectDate#">
+					<div class="content-xs">
+						<span   class="cmdName">version mc: </span>
+						<strong class="state">#mc#</strong>
+					</div>
+				</div>
+			</div> <!-- Pan_one -->
+			<div class="Pan_two" style="display: none;">
+				<div class="tooltips cmd cmd-widget chat" data-type="info" data-subtype="string" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" style="display: block;">
+					<div class="content-xs">
+						<span   class="cmdName">chat</span> 
+						<strong class="state">#chat#</strong>
+					</div>
+				</div>
+				<br/>
+				<div class="tooltips cmd cmd-widget send" data-type="action" data-subtype="message" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" style="display: block;">
+					<div class="content-xs">
+						<span   class="cmdName">envoyer</span> 
+						<strong class="state">#send#</strong>
+					</div>
+				</div>
+			</div>  <!-- Pan_two -->
+			<div class="Pan_three" style="display: none;">
+				<div class="tooltips cmd cmd-widget lastdecon" data-type="info" data-subtype="string" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" style="display: block;">
+					<div class="content-xs">
+						<span   class="cmdName">Last Decon: </span> 
+						<strong class="state">#lastdecon#</strong>
+					</div>
+				</div>
+			</div>  <!-- Pan_three -->
+			
+		</center> 
+	</div>
+	<div class="table_bottom" style="">
+		<table style="position:absolute; right:0px; bottom:0px; width: 100%; height:;border-radius:#border-radius#;" cellspacing="0" cellpadding="0" border="0">	
+			<tr style="height: 22px;">
+				<td class="td_bot1" style="width: 18px; text-align: left;">
+					<i class="fas fa-info-circle cursor tooltips infcmd noRefresh" title='Autres infos' style="margin-left: 3px; font-size: 0.9em;" ></i>		
+					<div class="infhtm" style="display: none;"> 
+						<div class="tooltips cmd cmd-widget lastCommunication" data-type="info" data-subtype="string" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" style="display: block;">
+							<div class="content-xs">
+								<span   class="cmdName">debut serveur: </span> 
+								<strong class="state">#lastCommunication#</strong>
+							</div>
+						</div>
+						<br/>
+						<div class="tooltips cmd cmd-widget numberTryWithoutSuccess" data-type="info" data-subtype="string" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" style="display: block;">
+							<div class="content-xs">
+								<span   class="cmdName">last Communication: </span> 
+								<strong class="state">#numberTryWithoutSuccess#</strong>
+							</div>
+						</div>
+					</div>
+				</td>
+				<td class="td_bot2" style="text-align: center;">
+				</td>
+				<td class="td_bot3" style="width: 18px;text-align: right;">
+					<i class="fas fa-bars cursor tooltips changecmd1 noRefresh" title='menu' style="margin-right: 3px;"></i>
+					<i class="fas fa-stack-exchange cursor tooltips changecmd2 noRefresh" title='chat' style="margin-right: 3px;"></i>
+					<i class="fas fa-regular fa-save cursor tooltips changecmd3 noRefresh" title='backup' style="margin-right: 3px;"></i>
+				</td>
+			</tr>
+			<script>
+				if ('#numberTryWithoutSuccess#' >= 3) {
+					$('.eqLogic[data-eqLogic_uid=#uid#] .infcmd').css('color', 'red');
+				} 
+				//**************************************//	
+				$('.eqLogic[data-eqLogic_uid=#uid#] .infcmd').off('click').on('click', function () {
+					$('.eqLogic[data-eqLogic_uid=#uid#] .infcmd').popover({
+						container: "body",
+						html: true,
+						placement: "auto",
+						selector : true,
+						//title: false,//"<strong>Liste des équipements</strong>",
+						content: function () {return $('.eqLogic[data-eqLogic_uid=#uid#] .infhtm').html(); } ,
+					})
+						.on("show.bs.popover", function () { 
+							$(this).data("bs.popover").tip()
+							.css({
+								"max-width": "500px",
+								"max-height":  "400px",
+								//overflow: "auto",
+								"overflow-y": "auto",
+								"background-color": "#474646",//'background-color',
+								"background": "#474646",
+							}); 
+							/*setTimeout(function () {
+								$('.eqLogic[data-eqLogic_uid=#uid#] .btn_eqliste').popover('hide');
+							}, 8000);
+							*/
+						});
+					$('.eqLogic[data-eqLogic_uid=#uid#] .infcmd').popover('show'); 
+				});
+				$('.eqLogic[data-eqLogic_uid=#uid#] .changecmd1').on('click',function () {
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_one').show();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_two').hide();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_three').hide();
+				});
+				$('.eqLogic[data-eqLogic_uid=#uid#] .changecmd2').on('click',function () {
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_one').hide();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_two').show();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_three').hide();
+				});
+				$('.eqLogic[data-eqLogic_uid=#uid#] .changecmd3').on('click',function () {
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_one').hide();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_two').hide();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_three').show();
+				});
+			</script>
+		</table>		
+	</div>
+	<!-- fin table_bottom    -->
+</div>
+<!-- Fin eqLogic-widget  -->

@@ -87,7 +87,7 @@ class mcmyadmin extends eqLogic {
   }
 
   // Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement
-  private function create_element($newcmd,$newname,$newtype,$newsubtype,$newtemplate = 'default'){
+  private function create_element($newcmd,$newname,$newtype,$newsubtype,$newunit = "",$newtemplate = 'default'){
     $newelement = $this->getCmd(null, $newcmd);
     if (!is_object($newelement)) {
       $newelement = new mcmyadminCmd();
@@ -98,6 +98,9 @@ class mcmyadmin extends eqLogic {
     $newelement->setType($newtype);
     $newelement->setSubType($newsubtype);
     $newelement->setTemplate('dashboard',$newtemplate);
+    if ($newunit != "") {
+      $newelement->setUnite($newunit);
+    }
     $newelement->save();
   }
 
@@ -121,8 +124,8 @@ class mcmyadmin extends eqLogic {
       $element->save();
     }
 
-    $this->create_element('cpuusage','cpuusage','info','numeric');
-    $this->create_element('ram','ram','info','numeric');
+    $this->create_element('cpuusage','cpuusage','info','numeric', '%');
+    $this->create_element('ram','ram','info','numeric','Mo');
     $this->create_element('users','users','info','string');
     $this->set_limit_element('users',0,100);
     $element = $this->getCmd(null, 'sendchat');
@@ -223,7 +226,80 @@ class mcmyadmin extends eqLogic {
     log::add('mcmyadmin','debug',$result);
     return $result;
   }
-  protected $retrylogin = true;
+  
+  public function toHtml($_version = 'dashboard') {
+    $replace = $this->preToHtml($_version);
+    if (!is_array($replace)) {
+      return $replace;
+    }
+    $version = jeedom::versionAlias($_version);
+    foreach ($this->getCmd('info') as $cmd) {
+      if (!is_object($cmd)) {
+        continue;
+      }
+      $replace['#' . $cmd->getLogicalId() . '#'] = $cmd->execCmd();
+      $replace['#' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
+      $replace['#' . $cmd->getLogicalId() . '_valueDate#']= date('d-m-Y H:i:s',strtotime($cmd->getValueDate()));
+      $replace['#' . $cmd->getLogicalId() . '_collectDate#'] =date('d-m-Y H:i:s',strtotime($cmd->getCollectDate()));
+      $replace['#' . $cmd->getLogicalId() . '_updatetime#'] =date('d-m-Y H:i:s',strtotime( $this->getConfiguration('updatetime')));
+      $replace['#lastCommunication#'] =date('d-m-Y H:i:s',strtotime($this->getStatus('lastCommunication')));
+      $replace['#numberTryWithoutSuccess#'] = $this->getStatus('numberTryWithoutSuccess', 0);
+      if ($cmd->getIsHistorized() == 1) {
+        $replace['#' . $cmd->getLogicalId() . '_history#'] = 'history cursor';
+      }
+    }
+    foreach ($this->getCmd('action') as $cmd) {
+      $replace['#' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
+      if (!is_object($cmd)) {
+        continue;
+      }
+      if ($cmd->getConfiguration('listValue', '') != '') {
+        $listOption = '';
+        $elements = explode(';', $cmd->getConfiguration('listValue', ''));
+        $foundSelect = false;
+        foreach ($elements as $element) {
+          list($item_val, $item_text) = explode('|', $element);
+          //$coupleArray = explode('|', $element);
+          $cmdValue = $cmd->getCmdValue();
+          if (is_object($cmdValue) && $cmdValue->getType() == 'info') {
+            if ($cmdValue->execCmd() == $item_val) {
+              $listOption .= '<option value="' . $item_val . '" selected>' . $item_text . '</option>';
+              $foundSelect = true;
+            } else {
+              $listOption .= '<option value="' . $item_val . '">' . $item_text . '</option>';
+            }
+          } else {
+            $listOption .= '<option value="' . $item_val . '">' . $item_text . '</option>';
+          }
+        }
+        //if (!$foundSelect) {
+        //	$listOption = '<option value="">Aucun</option>' . $listOption;
+        //}
+        //$replace['#listValue#'] = $listOption;
+        $replace['#' . $cmd->getLogicalId() . '_id_listValue#'] = $listOption;
+        $replace['#' . $cmd->getLogicalId() . '_listValue#'] = $listOption;
+      }
+    }
+    $parameters = $this->getDisplay('parameters');
+    if (is_array($parameters)) {
+        foreach ($parameters as $key => $value) {
+            $replace['#' . $key . '#'] = $value;
+        }
+    }
+
+
+    //$replace['#commune#'] = $this->getConfiguration('commune');
+    //$replace['#time#'] = $this->getCmd(null, 'time');
+    //$replace['#starttime#'] = $this->getCmd(null, 'starttime');
+    //$replace['#send#'] = $this->getCmd(null, 'send');
+    //$replace['#chat#'] = $this->getCmd(null, 'chat');
+    //$replace['#mc#'] = $this->getCmd(null, 'mc');
+    //$replace['#backend#'] = $this->getCmd(null, 'backend');
+    $replacde = implode(";", $replace);
+    log::add('mcmyadmin','debug',$replacde);
+    $widgetType = getTemplate('core', $_version, 'box', __CLASS__);
+		return $this->postToHtml($_version, template_replace($replace, $widgetType));
+	}
 }
 
 class mcmyadminCmd extends cmd {
