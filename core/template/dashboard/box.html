@@ -33,54 +33,60 @@
 					</div>
 				</div>
 				<div>
-					<div class="cmd cmd-widget reportModeHidden" data-type="action" data-subtype="other" data-template="default" data-cmd_id="#startserver_id#" data-cmd_uid="cmd#startserver_uid#" data-version="dashboard" data-eqlogic_id="#id#">
+					<div class="cmd cmd-widget tooltips mcstart" data-type="action" data-subtype="other" data-template="default" data-cmd_id="#startserver_id#" data-cmd_uid="cmd#startserver_uid#" data-version="dashboard" data-eqlogic_id="#id#">
 						<div class="content-xs">
-							<a class="btn btn-sm btn-default action tooltips tooltipstered mcstart">start</a>
+							<a class="btn btn-sm btn-default action">start</a>
 						</div>
 					</div>
-					<div class="cmd cmd-widget reportModeHidden" data-type="action" data-subtype="other" data-template="default" data-cmd_id="#restartserver_id#" data-cmd_uid="cmd#restartserver_uid#" data-version="dashboard" data-eqlogic_id="#id#">
+					<div class="cmd cmd-widget tooltips mcrestart" data-type="action" data-subtype="other" data-template="default" data-cmd_id="#restartserver_id#" data-cmd_uid="cmd#restartserver_uid#" data-version="dashboard" data-eqlogic_id="#id#">
 						<div class="content-xs">
-							<a class="btn btn-sm btn-default action tooltips tooltipstered mcrestart">restart</a>
+							<a class="btn btn-sm btn-default action">restart</a>
 						</div>
 					</div>
-					<div class="cmd cmd-widget reportModeHidden" data-type="action" data-subtype="other" data-template="default" data-cmd_id="#stopserver_id#" data-cmd_uid="cmd#stopserver_uid#" data-version="dashboard" data-eqlogic_id="#id#">
+					<div class="cmd cmd-widget tooltips mcshutdown" data-type="action" data-subtype="other" data-template="default" data-cmd_id="#stopserver_id#" data-cmd_uid="cmd#stopserver_uid#" data-version="dashboard" data-eqlogic_id="#id#">
 						<div class="content-xs">
-							<a class="btn btn-sm btn-default action tooltips tooltipstered mcshutdown">shutdown</a>
+							<a class="btn btn-sm btn-default action">shutdown</a>
 						</div>
 					</div>
-					<div class="cmd cmd-widget reportModeHidden" data-type="action" data-subtype="other" data-template="default" data-cmd_id="#sleepserver_id#" data-cmd_uid="cmd#sleepserver_uid#" data-version="dashboard" data-eqlogic_id="#id#">
+					<div class="cmd cmd-widget tooltips mcsleep" data-type="action" data-subtype="other" data-template="default" data-cmd_id="#sleepserver_id#" data-cmd_uid="cmd#sleepserver_uid#" data-version="dashboard" data-eqlogic_id="#id#">
 						<div class="content-xs">
-							<a class="btn btn-sm btn-default action tooltips tooltipstered mcsleep">sleep</a>
+							<a class="btn btn-sm btn-default action">sleep</a>
 						</div>
 					</div>
-					<div class="cmd cmd-widget reportModeHidden" data-type="action" data-subtype="other" data-template="default" data-cmd_id="#reload_id#" data-cmd_uid="cmd#reload_uid#" data-version="dashboard" data-eqlogic_id="#id#">
+					<div class="cmd cmd-widget tooltips mcreload" data-type="action" data-subtype="other" data-template="default" data-cmd_id="#reload_id#" data-cmd_uid="cmd#reload_uid#" data-version="dashboard" data-eqlogic_id="#id#">
 						<div class="content-xs">
-							<a class="btn btn-sm btn-default action tooltips tooltipstered mcreload">reload</a>
+							<a class="btn btn-sm btn-default action">reload</a>
 						</div>
 					</div>
-					<div class="cmd cmd-widget reportModeHidden" data-type="action" data-subtype="other" data-template="default" data-cmd_id="#killserver_id#" data-cmd_uid="cmd#killserver_uid#" data-version="dashboard" data-eqlogic_id="#id#">
+					<div class="cmd cmd-widget tooltips mckill" data-type="action" data-subtype="other" data-template="default" data-cmd_id="#killserver_id#" data-cmd_uid="cmd#killserver_uid#" data-version="dashboard" data-eqlogic_id="#id#">
 						<div class="content-xs">
-							<a class="btn btn-sm btn-default action tooltips tooltipstered mckill">kill</a>
+							<a class="btn btn-sm btn-default action">kill</a>
 						</div>
 					</div>
 					<script>
-						$('.eqLogic[data-cmd_id=#startserver_id#]:last .mcstart').on('click', function () {
-							jeedom.cmd.execute({id: '#startserver_id#', value: {message: 'action'}})
+						$('.cmd[data-cmd_id=#startserver_id#]:last .action').off('click').on('click', function () {
+							jeedom.cmd.execute({id: '#startserver_id#'})
+							jeedom.cmd.execute({id: '#refresh_id#'})
 						})
-						$('.eqLogic[data-cmd_id=#restartserver_id#]:last .mcrestart').on('click', function () {
-							jeedom.cmd.execute({id: '#restartserver_id#', value: {message: 'action'}})
+						$('.cmd[data-cmd_id=#restartserver_id#]:last .action').off('click').on('click', function () {
+							jeedom.cmd.execute({id: '#restartserver_id#'})
+							jeedom.cmd.execute({id: '#refresh_id#'})
 						})
-						$('.eqLogic[data-cmd_id=#stopserver_id#]:last .mcshutdown').on('click', function () {
-							jeedom.cmd.execute({id: '#stopserver_id#', value: {message: 'action'}})
+						$('.cmd[data-cmd_id=#stopserver_id#]:last .action').off('click').on('click', function () {
+							jeedom.cmd.execute({id: '#stopserver_id#'})
+							jeedom.cmd.execute({id: '#refresh_id#'})
 						})
-						$('.eqLogic[data-cmd_id=#sleepserver_id#]:last .mcsleep').on('click', function () {
-							jeedom.cmd.execute({id: '#sleepserver_id#', value: {message: 'action'}})
+						$('.cmd[data-cmd_id=#sleepserver_id#]:last .action').off('click').on('click', function () {
+							jeedom.cmd.execute({id: '#sleepserver_id#'})
+							jeedom.cmd.execute({id: '#refresh_id#'})
 						})
-						$('.eqLogic[data-cmd_id=#reload_id#]:last .mcreload').on('click', function () {
-							jeedom.cmd.execute({id: '#reload_id#', value: {message: 'action'}})
+						$('.cmd[data-cmd_id=#reload_id#]:last .action').off('click').on('click', function () {
+							jeedom.cmd.execute({id: '#reload_id#'})
+							jeedom.cmd.execute({id: '#refresh_id#'})
 						})
-						$('.eqLogic[data-cmd_id=#killserver_id#]:last .mckill').on('click', function () {
-							jeedom.cmd.execute({id: '#killserver_id#', value: {message: 'action'}})
+						$('.cmd[data-cmd_id=#killserver_id#]:last .action').off('click').on('click', function () {
+							jeedom.cmd.execute({id: '#killserver_id#'})
+							jeedom.cmd.execute({id: '#refresh_id#'})
 						})
 					</script>
 					<script>
@@ -108,7 +114,7 @@
 							$('.eqLogic[data-eqLogic_uid=#uid#] .mcreload').show();
 							$('.eqLogic[data-eqLogic_uid=#uid#] .mckill').show();
 						}
-						if ('#state#' == 40) {// en cours de passage en veille
+						if ('#state#' == 40) {// en cours de passage en veille ou arret
 							$('.eqLogic[data-eqLogic_uid=#uid#] .mcshutdown').show();
 							$('.eqLogic[data-eqLogic_uid=#uid#] .mcstart').hide();
 							$('.eqLogic[data-eqLogic_uid=#uid#] .mcsleep').hide();
@@ -193,7 +199,7 @@
 				<div class="content-xs">
 					<strong>CHAT</strong>
 				</div>
-				<div class="tooltips cmd cmd-widget chat" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#id#" style="display: block;">
+				<div class="tooltips cmd cmd-widget chat" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#chat_id#" style="display: block;">
 					<div class="content-xs">
 						<p align="left" class="state" >#chat#</p>
 					</div>

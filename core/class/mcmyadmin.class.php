@@ -397,7 +397,7 @@ class mcmyadminCmd extends cmd {
             $eqlogic->checkAndUpdateCmd("chatoffset", 0);
           }
         }
-        $chatlist = implode("<br/>", $chatlist);
+        $chatlist = implode("<br/>", array_reverse($chatlist));
         $eqlogic->checkAndUpdateCmd('chat', $chatlist);
         if ($info["timestamp"] < $chatoffset) {
           $cmd = $mcmyadmin->getCmd(null, 'refresh_chat'); //retourne la commande "refresh_chat" si elle existe
