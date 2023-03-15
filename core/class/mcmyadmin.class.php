@@ -285,6 +285,29 @@ class mcmyadmin extends eqLogic {
         $replace['#' . $key . '#'] = $value;
       }
     }
+
+    $element = $this->getCmd(null, 'userinfo');
+    if (is_object($element)) {
+      $player_table = "<table>";
+      $player = $element->execCmd();
+      if ($player == "") {
+        $player_table .= "<tr><td>no player</td></tr>";
+      }
+      else {
+        $player_line = explode("-!-",$player);
+        for($j = 0; count($player_line) > $j; $j++) {
+          $player_hash = explode("-:-",$player_line[$j]);
+          $player_table .= "<tr>";
+          for($k = 0; count($player_hash) > $k; $k++) {
+            $player_table .= "<td>" . $player_hash[$k] . "</td>";
+          }
+          $player_table .= "<td>kick</td><td>ban</td></tr>";
+        }
+      }
+      $player_table .= "</table>";
+      $replace['#' . $element->getLogicalId() . '#'] = $player_table;
+    }
+
     $widgetType = getTemplate('core', $_version, 'box', __CLASS__);
 		return $this->postToHtml($_version, template_replace($replace, $widgetType));
 	}
@@ -344,13 +367,13 @@ class mcmyadminCmd extends cmd {
         $playerlist = array();
         if(count($info['userinfo']) > 0) {
           foreach($info['userinfo'] as $user => $values) {
-            $playerlist[] = $values['Name'] . " : " . $values['IP'] . " : " . date("Y-m-d H:i:s", substr($values['ConnectTime'],6,-5));
+            $playerlist[] = $values['Name'] . "-:-" . $values['IP'] . "-:-" . date("Y-m-d H:i:s", substr($values['ConnectTime'],6,-5));
           }
+          $playerlist = implode("-!-", $playerlist);
         }
         else {
-          $playerlist[] = "aucun joueur connecté";
+          $playerlist = "";
         }
-        $playerlist = implode("<br/>", $playerlist);
         log::add('mcmyadmin','debug',"status:" . $info['state']);
         $eqlogic->checkAndUpdateCmd('state', $info['state']);
         $eqlogic->checkAndUpdateCmd('failed', $info['failed']);

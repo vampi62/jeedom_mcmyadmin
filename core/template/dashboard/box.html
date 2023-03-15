@@ -16,7 +16,7 @@
 	</script>
 	<div class="eq_body_#id#" >
 		<center>
-			<div class="Pan_one">
+			<div class="Pan_menu">
 				<div class="content-xs">
 					<strong>MENU</strong>
 				</div>
@@ -188,14 +188,18 @@
 						<strong class="state">#failmsg#</strong>
 					</div>
 				</div>
-				<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#userinfo_id#" data-cmd_uid="cmd#userinfo_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #userinfo_collectDate#">
+			</div> <!-- Pan_menu -->
+			<div class="Pan_joueur" style="display: none;">
+				<div class="content-xs">
+					<strong>LISTE JOUEURS</strong>
+				</div>
+				<div class="tooltips cmd cmd-widget chat" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#userinfo_id#" style="display: block;">
 					<div class="content-xs">
-						<span   class="cmdName">liste joueurs: </span>
-						<strong class="state">#userinfo#</strong>
+						<p align="left" class="state" >#userinfo#</p>
 					</div>
 				</div>
-			</div> <!-- Pan_one -->
-			<div class="Pan_two" style="display: none;">
+			</div>  <!-- Pan_joueur -->
+			<div class="Pan_chat" style="display: none;">
 				<div class="content-xs">
 					<strong>CHAT</strong>
 				</div>
@@ -216,8 +220,8 @@
 						});
 					</script>
 				</div>
-			</div>  <!-- Pan_two -->
-			<div class="Pan_three" style="display: none;">
+			</div>  <!-- Pan_chat -->
+			<div class="Pan_backup" style="display: none;">
 				<div class="content-xs">
 					<strong>BACKUP (en pause)</strong>
 				</div>
@@ -227,7 +231,18 @@
 						<strong class="state">#list_backup#</strong>
 					</div>
 				</div>
-			</div>  <!-- Pan_three -->
+			</div>  <!-- Pan_backup -->
+			<div class="Pan_config" style="display: none;">
+				<div class="content-xs">
+					<strong>CONFIG (en pause)</strong>
+				</div>
+				<div class="tooltips cmd cmd-widget list_config" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#id#" style="display: block;">
+					<div class="content-xs">
+						<span   class="cmdName">Last Decon: </span> 
+						<strong class="state">#list_config#</strong>
+					</div>
+				</div>
+			</div>  <!-- Pan_config -->
 		</center> 
 	</div>
 	<div class="table_bottom" style="">
@@ -254,9 +269,11 @@
 				<td class="td_bot2" style="text-align: center;">
 				</td>
 				<td class="td_bot3" style="width: 18px;text-align: right;" nowrap>
-					<i class="fas fa-bars cursor tooltips changecmd1 noRefresh" title='menu' style="margin-right: 3px;"></i>
-					<i class="fas fa-window-maximize cursor tooltips changecmd2 noRefresh" title='chat' style="margin-right: 3px;"></i>
-					<i class="fas fa-regular fa-save cursor tooltips changecmd3 noRefresh" title='backup' style="margin-right: 3px;"></i>
+					<i class="fas fa-bars cursor tooltips changecmdmenu noRefresh" title='menu' style="margin-right: 3px;"></i>
+					<i class="fas fa-child cursor tooltips changecmdjoueur noRefresh" title='joueurs' style="margin-right: 3px;"></i>
+					<i class="fas fa-comment cursor tooltips changecmdchat noRefresh" title='chat' style="margin-right: 3px;"></i>
+					<i class="fas fa-regular fa-save cursor tooltips changecmdbackup noRefresh" title='backup' style="margin-right: 3px;"></i>
+					<i class="fas fa-database cursor tooltips changecmdconfig noRefresh" title='config' style="margin-right: 3px;"></i>
 				</td>
 			</tr>
 			<script>
@@ -290,20 +307,40 @@
 						});
 					$('.eqLogic[data-eqLogic_uid=#uid#] .infcmd').popover('show'); 
 				});
-				$('.eqLogic[data-eqLogic_uid=#uid#] .changecmd1').on('click',function () {
-					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_one').show();
-					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_two').hide();
-					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_three').hide();
+				$('.eqLogic[data-eqLogic_uid=#uid#] .changecmdmenu').on('click',function () { // menu
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_menu').show();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_joueur').hide();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_chat').hide();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_backup').hide();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_config').hide();
 				});
-				$('.eqLogic[data-eqLogic_uid=#uid#] .changecmd2').on('click',function () {
-					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_one').hide();
-					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_two').show();
-					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_three').hide();
+				$('.eqLogic[data-eqLogic_uid=#uid#] .changecmdjoueur').on('click',function () { // joueur
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_menu').hide();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_joueur').show();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_chat').hide();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_backup').hide();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_config').hide();
 				});
-				$('.eqLogic[data-eqLogic_uid=#uid#] .changecmd3').on('click',function () {
-					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_one').hide();
-					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_two').hide();
-					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_three').show();
+				$('.eqLogic[data-eqLogic_uid=#uid#] .changecmdchat').on('click',function () { // chat
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_menu').hide();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_joueur').hide();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_chat').show();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_backup').hide();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_config').hide();
+				});
+				$('.eqLogic[data-eqLogic_uid=#uid#] .changecmdbackup').on('click',function () { // backup
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_menu').hide();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_joueur').hide();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_chat').hide();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_backup').show();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_config').hide();
+				});
+				$('.eqLogic[data-eqLogic_uid=#uid#] .changecmdconfig').on('click',function () { // config
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_menu').hide();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_joueur').hide();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_chat').hide();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_backup').hide();
+					$('.eqLogic[data-eqLogic_uid=#uid#] .Pan_config').show();
 				});
 			</script>
 		</table>		
