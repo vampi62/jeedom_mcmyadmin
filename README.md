@@ -9,12 +9,12 @@ TOUTES les commandes require l'utilisation d'un token reçu en retour de la comm
 | req | arguments | description | pris en charge sur le plugin |
 |:---------|:-------------:|:------------------|:-----:|
 | dodiagnostics | na |      |   |
-| getbackuplist | na |      |   |
+| getbackuplist | na |      | X |
 | getbackupstatus | na |      |   |
 | getchat | since(int) |      | X |
 | getconfig | key(str) |      |   |
 | getdeletestatus | na |      |   |
-| getfullconfig | na |      |   |
+| getfullconfig | na |      | X |
 | getplugins | na |      |   |
 | getproviderinfo | na |      |   |
 | getrestorestatus | na |      |   |
