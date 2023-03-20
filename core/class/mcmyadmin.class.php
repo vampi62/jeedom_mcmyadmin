@@ -230,8 +230,12 @@ class mcmyadmin extends eqLogic {
     log::add('mcmyadmin','debug',json_encode($result));
     return $result;
   }
-  private function printhtmltable($element,$commande,$messagevide) {
-    $table = "<table>";
+  private function printhtmltable($element,$headtable,$commande,$messagevide) {
+    $table = "<table><tr>";
+    for($j = 0; count($headtable) > $j; $j++) {
+      $table .= "<th style=\"padding: 10px;\">" . $headtable[$j] . "</th>";
+    }
+    $table .= "</tr>";
     $list = $element->execCmd();
     $nom_commande = $element->getLogicalId();
     if ($list == "") {
@@ -243,7 +247,7 @@ class mcmyadmin extends eqLogic {
         $lineelement = explode("-:-",$line[$j]);
         $table .= "<tr>";
         for($k = 0; count($lineelement) > $k; $k++) {
-          $table .= "<td>" . $lineelement[$k] . "</td>";
+          $table .= "<td style=\"padding: 10px;\">" . $lineelement[$k] . "</td>";
         }
         for($k = 0; count($commande) > $k; $k++) {
           $bouton_table = str_replace("#value#", $lineelement[0], $commande[$k]);
@@ -319,7 +323,8 @@ class mcmyadmin extends eqLogic {
     $element = $this->getCmd(null, 'chat');
     if (is_object($element)) {
       $list_commande = [];
-      $replace['#' . $element->getLogicalId() . '#'] = $this->printhtmltable($element,$list_commande,"pas de message");
+      $headtable = ["date","joueur","message"];
+      $replace['#' . $element->getLogicalId() . '#'] = $this->printhtmltable($element,$headtable,$list_commande,"pas de message");
     }
     $element = $this->getCmd(null, 'userlist');
     if (is_object($element)) {
@@ -332,8 +337,7 @@ class mcmyadmin extends eqLogic {
       </div>
       <script>
         $('.cmd[data-cmd_id=##nom_commande#_id#]:last .#nom_commande##value#kick').off('click').on('click', function () {
-          jeedom.cmd.execute({id: '#sendchat_id#', value: {message: '-/kick #value#'}})
-          jeedom.cmd.execute({id: '#refresh_id#'})
+          jeedom.cmd.execute({id: '#sendchat_id#', value: {message: '/kick #value#'}})
         })
       </script>"
       ,
@@ -344,22 +348,23 @@ class mcmyadmin extends eqLogic {
       </div>
       <script>
         $('.cmd[data-cmd_id=##nom_commande#_id#]:last .#nom_commande##value#ban').off('click').on('click', function () {
-          jeedom.cmd.execute({id: '#sendchat_id#', value: {message: '-/ban #value#'}})
-          jeedom.cmd.execute({id: '#refresh_id#'})
+          jeedom.cmd.execute({id: '#sendchat_id#', value: {message: '/ban #value#'}})
         })
       </script>"];
-
-      $replace['#' . $element->getLogicalId() . '#'] = $this->printhtmltable($element,$list_commande,"pas de joueur");
+      $headtable = ["joueur","IP","date de connexion","kick","ban"];
+      $replace['#' . $element->getLogicalId() . '#'] = $this->printhtmltable($element,$headtable,$list_commande,"pas de joueur");
     }
     $element = $this->getCmd(null, 'configlist');
     if (is_object($element)) {
       $list_commande = [];
-      $replace['#' . $element->getLogicalId() . '#'] = $this->printhtmltable($element,$list_commande,"");
+      $headtable = ["nom","valeur"];
+      $replace['#' . $element->getLogicalId() . '#'] = $this->printhtmltable($element,$headtable,$list_commande,"");
     }
     $element = $this->getCmd(null, 'backuplist');
     if (is_object($element)) {
-      $list_commande = ["kick","restore","delete"];
-      $replace['#' . $element->getLogicalId() . '#'] = $this->printhtmltable($element,$list_commande,"pas de backup");
+      $list_commande = [];
+      $headtable = [""];
+      $replace['#' . $element->getLogicalId() . '#'] = $this->printhtmltable($element,$headtable,$list_commande,"pas de backup");
     }
     $element = $this->getCmd(null, 'state');
     if (is_object($element)) {
@@ -391,8 +396,6 @@ class mcmyadmin extends eqLogic {
       $replace['#' . $element->getLogicalId() . '#'] = $status;
  
     }
-    
-
     $widgetType = getTemplate('core', $_version, 'box', __CLASS__);
 		return $this->postToHtml($_version, template_replace($replace, $widgetType));
 	}
@@ -558,11 +561,13 @@ class mcmyadminCmd extends cmd {
           $nbr_ligne_max = $this->getConfiguration("nbrchatlineshow", 10);
           foreach(array_reverse($info['chatdata']) as $user => $values) { // reverse pour afficher les derniers messages en premier
             if ($values['isChat']) {
-              $chatlist[] = date("Y-m-d H:i:s", substr($values['time'],6,-5)) . '-:-' . $values['user'] . '-:-' . $values['message'];
-              $nbr_chat_impr++;
-              if ($nbr_chat_impr >= $nbr_ligne_max) {
-                $eqlogic->checkAndUpdateCmd("chatoffset", intval($values["timestamp"]-1));
-                break;
+              if ($values['user'] != "Not") {
+                $chatlist[] = date("Y-m-d H:i:s", substr($values['time'],6,-5)) . '-:-' . $values['user'] . '-:-' . $values['message'];
+                $nbr_chat_impr++;
+                if ($nbr_chat_impr >= $nbr_ligne_max) {
+                  $eqlogic->checkAndUpdateCmd("chatoffset", intval($values["timestamp"]-1));
+                  break;
+                }
               }
             }
           }
