@@ -10,9 +10,13 @@
 		<a href="#eqLink#">#name_display# <span class="object_name">#object_name#</span></a>
 	</center>
 	<script>
-		$('.eqLogic[data-eqLogic_uid=#uid#] .refresh').on('click', function () {
-			jeedom.cmd.execute({id: '#refresh_id#'})
-		});
+		if ('#refresh_id#' != ''){
+			$('.eqLogic[data-eqLogic_uid=#uid#] .refresh').on('click', function () {
+				jeedom.cmd.execute({id: '#refresh_id#'});
+			});
+		}else{
+			$('.eqLogic[data-eqLogic_uid=#uid#] .refresh').remove();
+		}
 	</script>
 	<div class="eq_body_#id#" >
 		<center>
@@ -215,7 +219,6 @@
 					</div>
 					<script>
 						$('.cmd[data-cmd_id=#sendchat_id#]:last .execute').on('click', function() {
-							//jeedom.cmd.execute({id: '1380', value: {title: $('.cmd[data-cmd_uid=cmd1380__1055418022__] .title').value(), message: $('.cmd[data-cmd_uid=cmd1380__1055418022__] .message').value()}})
 							jeedom.cmd.execute({id: '#sendchat_id#', value: {message: $('.cmd[data-cmd_id=#sendchat_id#] .message').value()}});
 							document.getElementById("messagemc").value = '';
 						});

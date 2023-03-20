@@ -232,13 +232,13 @@ class mcmyadmin extends eqLogic {
   }
   private function printhtmltable($element,$commande,$messagevide) {
     $table = "<table>";
-    $player = $element->execCmd();
+    $list = $element->execCmd();
     $nom_commande = $element->getLogicalId();
-    if ($player == "") {
+    if ($list == "") {
       $table .= "<tr><td>" . $messagevide . "</td></tr>";
     }
     else {
-      $line = explode("-!-",$player);
+      $line = explode("-!-",$list);
       for($j = 0; count($line) > $j; $j++) {
         $lineelement = explode("-:-",$line[$j]);
         $table .= "<tr>";
@@ -246,7 +246,7 @@ class mcmyadmin extends eqLogic {
           $table .= "<td>" . $lineelement[$k] . "</td>";
         }
         for($k = 0; count($commande) > $k; $k++) {
-          $bouton_table = str_replace("#value#", $lineelement[0], $commande[$k][0]);
+          $bouton_table = str_replace("#value#", $lineelement[0], $commande[$k]);
           $bouton_table = str_replace("#nom_commande#", $nom_commande, $bouton_table);
           $table .= "<td>" . $bouton_table . "</td>";
         }
@@ -323,22 +323,32 @@ class mcmyadmin extends eqLogic {
     }
     $element = $this->getCmd(null, 'userlist');
     if (is_object($element)) {
-      $list_commande = [["<div class=\"content-lg\">
-      <a class=\"btn btn-xs data-cmd_id=##nom_commande#_id# kick#value#\">kick</a>
+
+      $list_commande = ["
+      <div class=\"cmd cmd-widget tooltips #nom_commande##value#\" data-type=\"action\" data-subtype=\"other\" data-template=\"default\" data-cmd_id=\"##nom_commande#_id#\" data-cmd_uid=\"cmd##nom_commande#_uid#\" data-version=\"dashboard\" data-eqlogic_id=\"#id#\">
+        <div class=\"content-xs\">
+          <a class=\"btn btn-sm btn-default #nom_commande##value#kick\">kick</a>
+        </div>
       </div>
       <script>
-        $('.btn[data-cmd_id=##nom_commande#_id#]:last .kick#value#').on('click', function() {
+        $('.cmd[data-cmd_id=##nom_commande#_id#]:last .#nom_commande##value#kick').off('click').on('click', function () {
           jeedom.cmd.execute({id: '#sendchat_id#', value: {message: '-/kick #value#'}})
-        });
-      </script>"],
-      ["<div class=\"content-lg\">
-      <a class=\"btn btn-xs data-cmd_id=##nom_commande#_id# ban#value#\">ban</a>
+          jeedom.cmd.execute({id: '#refresh_id#'})
+        })
+      </script>"
+      ,
+      "<div class=\"cmd cmd-widget tooltips #nom_commande##value#\" data-type=\"action\" data-subtype=\"other\" data-template=\"default\" data-cmd_id=\"##nom_commande#_id#\" data-cmd_uid=\"cmd##nom_commande#_uid#\" data-version=\"dashboard\" data-eqlogic_id=\"#id#\">
+        <div class=\"content-xs\">
+          <a class=\"btn btn-sm btn-default #nom_commande##value#ban\">ban</a>
+        </div>
       </div>
       <script>
-        $('.btn[data-cmd_id=##nom_commande#_id#]:last .ban#value#').on('click', function() {
+        $('.cmd[data-cmd_id=##nom_commande#_id#]:last .#nom_commande##value#ban').off('click').on('click', function () {
           jeedom.cmd.execute({id: '#sendchat_id#', value: {message: '-/ban #value#'}})
-        });
-      </script>"]];
+          jeedom.cmd.execute({id: '#refresh_id#'})
+        })
+      </script>"];
+
       $replace['#' . $element->getLogicalId() . '#'] = $this->printhtmltable($element,$list_commande,"pas de joueur");
     }
     $element = $this->getCmd(null, 'configlist');
@@ -351,6 +361,37 @@ class mcmyadmin extends eqLogic {
       $list_commande = ["kick","restore","delete"];
       $replace['#' . $element->getLogicalId() . '#'] = $this->printhtmltable($element,$list_commande,"pas de backup");
     }
+    $element = $this->getCmd(null, 'state');
+    if (is_object($element)) {
+      $status = $element->execCmd();
+      switch($status)
+      {
+        case "0":
+          $status = "stopped";
+        break;
+        case "10":
+          $status = "starting";
+        break;
+        case "20":
+          $status = "running";
+        break;
+        case "30":
+          $status = "stopping";
+        break;
+        case "40":
+          $status = "restarting";
+        break;
+        case "50":
+          $status = "updating";
+        break;
+        default:
+          $status = "unknown";
+        break;
+      }
+      $replace['#' . $element->getLogicalId() . '#'] = $status;
+ 
+    }
+    
 
     $widgetType = getTemplate('core', $_version, 'box', __CLASS__);
 		return $this->postToHtml($_version, template_replace($replace, $widgetType));
@@ -430,6 +471,12 @@ class mcmyadminCmd extends cmd {
         else {
           $playerlist = "";
         }
+        //debug
+        $playerlist = array();
+        $playerlist[] = "vampi62-:-192.168.1.30-:-2023:01:01 00:00:00";
+        $playerlist = implode("-!-", $playerlist);
+
+
         $eqlogic->checkAndUpdateCmd('state', $info['state']);
         $eqlogic->checkAndUpdateCmd('failed', $info['failed']);
         $eqlogic->checkAndUpdateCmd('failmsg', $info['failmsg']);
@@ -474,7 +521,7 @@ class mcmyadminCmd extends cmd {
         $list = array();
         if(count($info['backuplist']) > 0) {
           foreach($info['backuplist'] as $user => $values) {
-            $list[] = $values['Name'] . "-:-" . $values['IP'] . "-:-" . date("Y-m-d H:i:s", substr($values['ConnectTime'],6,-5));
+            //$list[] = $values['Name'] . "-:-" . $values['IP'] . "-:-" . date("Y-m-d H:i:s", substr($values['ConnectTime'],6,-5));
           }
           $list = implode("-!-", $list);
         }
