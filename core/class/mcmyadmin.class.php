@@ -529,24 +529,22 @@ class mcmyadminCmd extends cmd {
         }
         $eqlogic->checkAndUpdateCmd('chat', $chatlist);
         if (intval($info["timestamp"]) < $chatoffset) {
-          $cmd = $eqlogic->getCmd(null, 'refresh_chat'); //retourne la commande "refresh_chat" si elle existe
-          if (!is_object($cmd)) { //Si la commande n'existe pas
-            break;
+          $cmd = $eqlogic->getCmd(null, 'refresh_chat');
+          if (is_object($cmd)) {
+            $cmd->execCmd(['MCMASESSIONID'=>$MCMASESSIONID]);
           }
-          $cmd->execCmd(); // rechargement du chat avec le nouveau message
         }
       break;
       case 'sendchat':
         $info = $eqlogic->sendChat($url . "&MCMASESSIONID=" . $MCMASESSIONID,$_options['message']);
-        if ($info['status'] != 200) {
-          break;
-        }
+        //if ($info['status'] != 200) {
+        //  break;
+        //}
         sleep(1); // on attend 1 seconde pour laisser le temps au serveur de traiter la commande
-        $cmd = $eqlogic->getCmd(null, 'refresh_chat'); //retourne la commande "refresh_chat" si elle existe
-        if (!is_object($cmd)) { //Si la commande n'existe pas
-          break;
+        $cmd = $eqlogic->getCmd(null, 'refresh_chat');
+        if (is_object($cmd)) {
+          $cmd->execCmd(['MCMASESSIONID'=>$MCMASESSIONID]);
         }
-        $cmd->execCmd(); // rechargement du chat avec le nouveau message
       break;
     }
   }
