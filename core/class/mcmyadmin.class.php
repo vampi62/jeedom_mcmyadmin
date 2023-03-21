@@ -207,7 +207,7 @@ class mcmyadmin extends eqLogic {
 	}
 	public function sendChat($url,$message) {
 		if($message) {
-      return $this->request($url . "&req=sendchat&message=" . $message);
+      return $this->request($url . "&req=sendchat&message=" . urlencode($message));
 		}
 	}
   public function exec_command($url,$commandname) {
@@ -230,24 +230,23 @@ class mcmyadmin extends eqLogic {
     log::add('mcmyadmin','debug',json_encode($result));
     return $result;
   }
-  private function printhtmltable($element,$headtable,$commande,$messagevide) {
-    $table = "<table><tr>";
-    for($j = 0; count($headtable) > $j; $j++) {
-      $table .= "<th style=\"padding: 10px;\">" . $headtable[$j] . "</th>";
-    }
-    $table .= "</tr>";
+  private function printhtmltable($element,$headtable,$commande) {
     $list = $element->execCmd();
     $nom_commande = $element->getLogicalId();
-    if ($list == "") {
-      $table .= "<tr><td>" . $messagevide . "</td></tr>";
+    /* $table = "<table id=\"dtDynamicVerticalScrollExample#nom_commande#\" class=\"table table-striped table-bordered table-sm\" cellspacing=\"0\"
+    width=\"100%\"><tr style=\"white-space: nowrap;\">"; */
+    $table = "<table style=\"max-width: 500px; max-height: 100px; overflow: scrool;\" ><tr style=\"white-space: nowrap;\">";
+    for($j = 0; count($headtable) > $j; $j++) {
+      $table .= "<th style=\"padding: 5px;\">" . $headtable[$j] . "</th>";
     }
-    else {
+    $table .= "</tr>";
+    if ($list != "") {
       $line = explode("-!-",$list);
       for($j = 0; count($line) > $j; $j++) {
         $lineelement = explode("-:-",$line[$j]);
         $table .= "<tr>";
         for($k = 0; count($lineelement) > $k; $k++) {
-          $table .= "<td style=\"padding: 10px;\">" . $lineelement[$k] . "</td>";
+          $table .= "<td style=\"padding: 5px;\">" . $lineelement[$k] . "</td>";
         }
         for($k = 0; count($commande) > $k; $k++) {
           $bouton_table = str_replace("#value#", $lineelement[0], $commande[$k]);
@@ -258,6 +257,13 @@ class mcmyadmin extends eqLogic {
       }
     }
     $table .= "</table>";
+    /* $table .= "<script>$(document).ready(function () {
+      $('#dtDynamicVerticalScrollExample#nom_commande#').DataTable({
+        \"scrollY\": \"50vh\",
+        \"scrollCollapse\": true,
+      });
+      $('.dataTables_length').addClass('bs-select');
+    });</script>" */;
     return $table;
   }
   public function toHtml($_version = 'dashboard') {
@@ -324,13 +330,12 @@ class mcmyadmin extends eqLogic {
     if (is_object($element)) {
       $list_commande = [];
       $headtable = ["date","joueur","message"];
-      $replace['#' . $element->getLogicalId() . '#'] = $this->printhtmltable($element,$headtable,$list_commande,"pas de message");
+      $replace['#' . $element->getLogicalId() . '#'] = $this->printhtmltable($element,$headtable,$list_commande);
     }
     $element = $this->getCmd(null, 'userlist');
     if (is_object($element)) {
-
-      $list_commande = ["
-      <div class=\"cmd cmd-widget tooltips #nom_commande##value#\" data-type=\"action\" data-subtype=\"other\" data-template=\"default\" data-cmd_id=\"##nom_commande#_id#\" data-cmd_uid=\"cmd##nom_commande#_uid#\" data-version=\"dashboard\" data-eqlogic_id=\"#id#\">
+      $list_commande = [
+      "<div class=\"cmd cmd-widget tooltips #nom_commande##value#\" data-type=\"action\" data-subtype=\"other\" data-template=\"default\" data-cmd_id=\"##nom_commande#_id#\" data-cmd_uid=\"cmd##nom_commande#_uid#\" data-version=\"dashboard\" data-eqlogic_id=\"#id#\">
         <div class=\"content-xs\">
           <a class=\"btn btn-sm btn-default #nom_commande##value#kick\">kick</a>
         </div>
@@ -339,32 +344,21 @@ class mcmyadmin extends eqLogic {
         $('.cmd[data-cmd_id=##nom_commande#_id#]:last .#nom_commande##value#kick').off('click').on('click', function () {
           jeedom.cmd.execute({id: '#sendchat_id#', value: {message: '/kick #value#'}})
         })
-      </script>"
-      ,
-      "<div class=\"cmd cmd-widget tooltips #nom_commande##value#\" data-type=\"action\" data-subtype=\"other\" data-template=\"default\" data-cmd_id=\"##nom_commande#_id#\" data-cmd_uid=\"cmd##nom_commande#_uid#\" data-version=\"dashboard\" data-eqlogic_id=\"#id#\">
-        <div class=\"content-xs\">
-          <a class=\"btn btn-sm btn-default #nom_commande##value#ban\">ban</a>
-        </div>
-      </div>
-      <script>
-        $('.cmd[data-cmd_id=##nom_commande#_id#]:last .#nom_commande##value#ban').off('click').on('click', function () {
-          jeedom.cmd.execute({id: '#sendchat_id#', value: {message: '/ban #value#'}})
-        })
       </script>"];
-      $headtable = ["joueur","IP","date de connexion","kick","ban"];
-      $replace['#' . $element->getLogicalId() . '#'] = $this->printhtmltable($element,$headtable,$list_commande,"pas de joueur");
+      $headtable = ["joueur","IP","date de connexion","kick"];
+      $replace['#' . $element->getLogicalId() . '#'] = $this->printhtmltable($element,$headtable,$list_commande);
     }
     $element = $this->getCmd(null, 'configlist');
     if (is_object($element)) {
       $list_commande = [];
       $headtable = ["nom","valeur"];
-      $replace['#' . $element->getLogicalId() . '#'] = $this->printhtmltable($element,$headtable,$list_commande,"");
+      $replace['#' . $element->getLogicalId() . '#'] = $this->printhtmltable($element,$headtable,$list_commande);
     }
     $element = $this->getCmd(null, 'backuplist');
     if (is_object($element)) {
       $list_commande = [];
-      $headtable = [""];
-      $replace['#' . $element->getLogicalId() . '#'] = $this->printhtmltable($element,$headtable,$list_commande,"pas de backup");
+      $headtable = ["nom","date","restaurer","supprimer"];
+      $replace['#' . $element->getLogicalId() . '#'] = $this->printhtmltable($element,$headtable,$list_commande);
     }
     $element = $this->getCmd(null, 'state');
     if (is_object($element)) {
@@ -393,7 +387,7 @@ class mcmyadmin extends eqLogic {
           $status = "unknown";
         break;
       }
-      $replace['#' . $element->getLogicalId() . '#'] = $status;
+      $replace['#' . $element->getLogicalId() . '_text#'] = $status;
  
     }
     $widgetType = getTemplate('core', $_version, 'box', __CLASS__);
@@ -561,13 +555,11 @@ class mcmyadminCmd extends cmd {
           $nbr_ligne_max = $this->getConfiguration("nbrchatlineshow", 10);
           foreach(array_reverse($info['chatdata']) as $user => $values) { // reverse pour afficher les derniers messages en premier
             if ($values['isChat']) {
-              if ($values['user'] != "Not") {
-                $chatlist[] = date("Y-m-d H:i:s", substr($values['time'],6,-5)) . '-:-' . $values['user'] . '-:-' . $values['message'];
-                $nbr_chat_impr++;
-                if ($nbr_chat_impr >= $nbr_ligne_max) {
-                  $eqlogic->checkAndUpdateCmd("chatoffset", intval($values["timestamp"]-1));
-                  break;
-                }
+              $chatlist[] = date("Y-m-d H:i:s", substr($values['time'],6,-5)) . '-:-' . $values['user'] . '-:-' . $values['message'];
+              $nbr_chat_impr++;
+              if ($nbr_chat_impr >= $nbr_ligne_max) {
+                $eqlogic->checkAndUpdateCmd("chatoffset", intval($values["timestamp"]-1));
+                break;
               }
             }
           }
