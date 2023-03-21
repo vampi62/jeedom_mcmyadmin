@@ -198,7 +198,7 @@
 					<strong>LISTE JOUEURS</strong>
 				</div>
 				<div class="tooltips cmd cmd-widget userlist" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#userlist_id#" style="display: block;">
-					<div class="content-xs">
+					<div style="max-width: #widthuserlist#px; max-height: #heightuserlist#px; overflow:auto;">
 						#userlist#
 					</div>
 				</div>
@@ -208,7 +208,7 @@
 					<strong>CHAT</strong>
 				</div>
 				<div class="tooltips cmd cmd-widget chat" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#chat_id#" style="display: block;">
-					<div class="content-xs">
+					<div style="max-width: #widthchat#px; max-height: #heightchat#px; overflow:auto;">
 						#chat#
 					</div>
 				</div>
@@ -230,7 +230,7 @@
 					<strong>BACKUP (en pause)</strong>
 				</div>
 				<div class="tooltips cmd cmd-widget backuplist" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#backuplist_id#" style="display: block;">
-					<div class="content-xs">
+					<div style="max-width: #widthbackuplist#px; max-height: #heightbackuplist#px; overflow:auto;">
 						#backuplist#
 					</div>
 				</div>
@@ -240,7 +240,8 @@
 					<strong>CONFIG (en pause)</strong>
 				</div>
 				<div class="tooltips cmd cmd-widget configlist" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#configlist_id#" style="display: block;">
-					<div style="max-width: 500px; max-height: 400px; overflow:auto;">
+					<div style="max-width: #widthconfiglist#px; max-height: #heightconfiglist#px; overflow:auto;">
+					<!--<div style="width: 100%; height: 100%; overflow:auto;">-->
 						#configlist#
 					</div>
 				</div>

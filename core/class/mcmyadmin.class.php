@@ -237,7 +237,7 @@ class mcmyadmin extends eqLogic {
     width=\"100%\"><tr style=\"white-space: nowrap;\">";
     $table = "<table style=\"max-width: 500px; max-height: 100px; overflow: scrool;\" ><tr style=\"white-space: nowrap;\">";
      */
-    $table = "<table style=\"width: 500;\" ><tr style=\"white-space: nowrap;\">";
+    $table = "<table><tr style=\"white-space: nowrap;\">";
     for($j = 0; count($headtable) > $j; $j++) {
       $table .= "<th style=\"padding: 5px;\">" . $headtable[$j] . "</th>";
     }
@@ -392,6 +392,14 @@ class mcmyadmin extends eqLogic {
       $replace['#' . $element->getLogicalId() . '_text#'] = $status;
  
     }
+    $replace['#heightconfiglist#'] = strval(intval($replace['#height#'])-70);
+    $replace['#widthconfiglist#'] = strval(intval($replace['#width#']));
+    $replace['#heightbackuplist#'] = strval(intval($replace['#height#'])-70);
+    $replace['#widthbackuplist#'] = strval(intval($replace['#width#']));
+    $replace['#heightchat#'] = strval(intval($replace['#height#'])-150);
+    $replace['#widthchat#'] = strval(intval($replace['#width#']));
+    $replace['#heightuserlist#'] = strval(intval($replace['#height#'])-70);
+    $replace['#widthuserlist#'] = strval(intval($replace['#width#']));
     $widgetType = getTemplate('core', $_version, 'box', __CLASS__);
 		return $this->postToHtml($_version, template_replace($replace, $widgetType));
 	}
