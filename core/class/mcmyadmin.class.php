@@ -234,8 +234,10 @@ class mcmyadmin extends eqLogic {
     $list = $element->execCmd();
     $nom_commande = $element->getLogicalId();
     /* $table = "<table id=\"dtDynamicVerticalScrollExample#nom_commande#\" class=\"table table-striped table-bordered table-sm\" cellspacing=\"0\"
-    width=\"100%\"><tr style=\"white-space: nowrap;\">"; */
+    width=\"100%\"><tr style=\"white-space: nowrap;\">";
     $table = "<table style=\"max-width: 500px; max-height: 100px; overflow: scrool;\" ><tr style=\"white-space: nowrap;\">";
+     */
+    $table = "<table style=\"width: 500;\" ><tr style=\"white-space: nowrap;\">";
     for($j = 0; count($headtable) > $j; $j++) {
       $table .= "<th style=\"padding: 5px;\">" . $headtable[$j] . "</th>";
     }

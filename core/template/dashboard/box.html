@@ -240,7 +240,7 @@
 					<strong>CONFIG (en pause)</strong>
 				</div>
 				<div class="tooltips cmd cmd-widget configlist" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#configlist_id#" style="display: block;">
-					<div class="content-xs">
+					<div style="max-width: 500px; max-height: 400px; overflow:auto;">
 						#configlist#
 					</div>
 				</div>
@@ -347,6 +347,11 @@
 			</script>
 		</table>		
 	</div>
+	<!-- <script>
+		jeedom.cmd.update['#chat_id#'] = function(_options) {
+		  $(".cmd[eqlogic_id=#chat_id#] .chat").val(_options.display_value)
+		}
+	</script> -->
 	<!-- fin table_bottom    -->
 </div>
 <!-- Fin eqLogic-widget  -->
