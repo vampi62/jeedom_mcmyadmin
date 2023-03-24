@@ -123,7 +123,10 @@ class mcmyadmin extends eqLogic {
 
     $this->create_element('cpuusage','cpuusage','info','string', '%');
     $this->create_element('ram','ram','info','string','Mo');
+    $this->create_element('rammax','rammax','info','string','Mo');
+    $this->create_element('rampercent','rampercent','info','string','%');
     $this->create_element('users','users','info','string');
+    $this->create_element('usermax','usermax','info','string');
     $element = $this->getCmd(null, 'sendchat');
     if (is_object($element)) {
       $element->setDisplay('title_disable', '1');
@@ -131,6 +134,7 @@ class mcmyadmin extends eqLogic {
     }
 
     $this->create_element('state','state','info','string');
+    $this->create_element('state_text','state_text','info','string');
     
 
     $this->create_element('failed','failed','info','string');
@@ -362,36 +366,6 @@ class mcmyadmin extends eqLogic {
       $headtable = ["nom","date","restaurer","supprimer"];
       $replace['#' . $element->getLogicalId() . '#'] = $this->printhtmltable($element,$headtable,$list_commande);
     }
-    $element = $this->getCmd(null, 'state');
-    if (is_object($element)) {
-      $status = $element->execCmd();
-      switch($status)
-      {
-        case "0":
-          $status = "stopped";
-        break;
-        case "10":
-          $status = "starting";
-        break;
-        case "20":
-          $status = "running";
-        break;
-        case "30":
-          $status = "stopping";
-        break;
-        case "40":
-          $status = "restarting";
-        break;
-        case "50":
-          $status = "updating";
-        break;
-        default:
-          $status = "unknown";
-        break;
-      }
-      $replace['#' . $element->getLogicalId() . '_text#'] = $status;
- 
-    }
     $replace['#heightconfiglist#'] = strval(intval($replace['#height#'])-70);
     $replace['#widthconfiglist#'] = strval(intval($replace['#width#']));
     $replace['#heightbackuplist#'] = strval(intval($replace['#height#'])-70);
@@ -400,8 +374,8 @@ class mcmyadmin extends eqLogic {
     $replace['#widthchat#'] = strval(intval($replace['#width#']));
     $replace['#heightuserlist#'] = strval(intval($replace['#height#'])-70);
     $replace['#widthuserlist#'] = strval(intval($replace['#width#']));
-    $widgetType = getTemplate('core', $_version, 'box', __CLASS__);
-		return $this->postToHtml($_version, template_replace($replace, $widgetType));
+    $widgetType = getTemplate('core', $version, 'box', __CLASS__);
+		return $this->postToHtml($version, template_replace($replace, $widgetType));
 	}
 }
 
@@ -478,23 +452,44 @@ class mcmyadminCmd extends cmd {
         else {
           $playerlist = "";
         }
-        //debug
-        $playerlist = array();
-        $playerlist[] = "vampi62-:-192.168.1.30-:-2023:01:01 00:00:00";
-        $playerlist = implode("-!-", $playerlist);
-
-
         $eqlogic->checkAndUpdateCmd('state', $info['state']);
+        switch($info['state'])
+        {
+          case "0":
+            $eqlogic->checkAndUpdateCmd('state_text', "stopped");
+          break;
+          case "10":
+            $eqlogic->checkAndUpdateCmd('state_text', "starting");
+          break;
+          case "20":
+            $eqlogic->checkAndUpdateCmd('state_text', "running");
+          break;
+          case "30":
+            $eqlogic->checkAndUpdateCmd('state_text', "stopping");
+          break;
+          case "40":
+            $eqlogic->checkAndUpdateCmd('state_text', "restarting");
+          break;
+          case "50":
+            $eqlogic->checkAndUpdateCmd('state_text', "updating");
+          break;
+          default:
+            $eqlogic->checkAndUpdateCmd('state_text', "unknown");
+          break;
+        }
         $eqlogic->checkAndUpdateCmd('failed', $info['failed']);
         $eqlogic->checkAndUpdateCmd('failmsg', $info['failmsg']);
         //$eqlogic->set_limit_element('users',0,$info['maxusers']);
-        $eqlogic->checkAndUpdateCmd('users', count($info['userlist']) . "/" . $info['maxusers']);
+        $eqlogic->checkAndUpdateCmd('users', count($info['userlist']));
+        $eqlogic->checkAndUpdateCmd('usermax', $info['maxusers']);
         $eqlogic->checkAndUpdateCmd('userlist', $playerlist);
         $eqlogic->checkAndUpdateCmd('time', $info['time']);
         //$eqlogic->set_limit_element('ram',0,$info['maxram']);
-        $eqlogic->checkAndUpdateCmd('ram', $info['ram'] . "/" . $info['maxram'] . " Mo - " . strval(round((100/$info['maxram'])*$info['ram'],2)) . " %");
+        $eqlogic->checkAndUpdateCmd('ram', $info['ram']);
+        $eqlogic->checkAndUpdateCmd('rammax', $info['maxram']);
+        $eqlogic->checkAndUpdateCmd('rampercent', strval(round((100/$info['maxram'])*$info['ram'],2)));
         $eqlogic->checkAndUpdateCmd('starttime', $info['starttime']);
-        $eqlogic->checkAndUpdateCmd('cpuusage', $info['cpuusage'] . " %");
+        $eqlogic->checkAndUpdateCmd('cpuusage', $info['cpuusage']);
         $cmd = $eqlogic->getCmd(null, 'refresh_version');
         if (is_object($cmd)) {
           $cmd->execCmd(['MCMASESSIONID'=>$MCMASESSIONID]);
@@ -583,6 +578,7 @@ class mcmyadminCmd extends cmd {
         }
         $eqlogic->checkAndUpdateCmd('chat', $chatlist);
         if (intval($info["timestamp"]) < $chatoffset) {
+          $eqlogic->checkAndUpdateCmd("chatoffset", 0);
           $cmd = $eqlogic->getCmd(null, 'refresh_chat');
           if (is_object($cmd)) {
             $cmd->execCmd(['MCMASESSIONID'=>$MCMASESSIONID]);

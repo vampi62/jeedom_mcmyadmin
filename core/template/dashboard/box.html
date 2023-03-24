@@ -18,6 +18,75 @@
 			$('.eqLogic[data-eqLogic_uid=#uid#] .refresh').remove();
 		}
 	</script>
+	 <!--
+		jeedom.cmd.addUpdateFunction('#state_id#',function(_options) {
+			let cmd = $('.cmd[data-cmd_id=#state_id#]')
+			cmd.attr('title', 'Valeur du: '+_options.collectDate)
+			cmd.find('.state').empty().append(_options.display_value)
+		});
+		jeedom.cmd.refreshValue([{cmd_id :'#state_id#',display_value: '#state#', valueDate: '#state_valueDate#', collectDate: '#state_collectDate#', alertLevel: '#state_alertLevel#'}]);
+	 <script>
+		jeedom.cmd.addUpdateFunction('#chat_id#',function(_options) {
+		  let cmd = $('.cmd[data-cmd_id=#chat_id#]')
+		  cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
+		  cmd.find('.state').empty().append(_options.display_value+' ')
+		});
+		jeedom.cmd.refreshValue([{cmd_id :'#chat_id#',display_value: '#chat#', valueDate: '#chat_valueDate#', collectDate: '#chat__collectDate#', alertLevel: 'none', unit: ''}])
+		jeedom.cmd.addUpdateFunction('#userlist_id#',function(_options) {
+		  let cmd = $('.cmd[data-cmd_id=#userlist_id#]')
+		  cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
+		  cmd.find('.state').empty().append(_options.display_value+' ')
+		});
+		jeedom.cmd.refreshValue([{cmd_id :'#userlist_id#',display_value: '#userlist#', valueDate: '#userlist_valueDate#', collectDate: '#userlist_collectDate#', alertLevel: 'none', unit: ''}])
+		jeedom.cmd.addUpdateFunction('#state_id#',function(_options) {
+		  let cmd = $('.cmd[data-cmd_id=#state_id#]')
+		  cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
+		  cmd.find('.state').empty().append(_options.display_value+' ')
+		});
+		jeedom.cmd.refreshValue([{cmd_id :'#state_id#',display_value: '#state#', valueDate: '#state_valueDate#', collectDate: '#state_collectDate#', alertLevel: 'none', unit: ''}])
+		
+		jeedom.cmd.update['#chat_id#']=function(_options) {
+		  let cmd = $('.cmd[data-cmd_id=#chat_id#]')
+		  cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
+		  cmd.find('.state').empty().append(_options.display_value+' ')
+		};
+		jeedom.cmd.update['#userlist_id#']=function(_options) {
+		  let cmd = $('.cmd[data-cmd_id=#userlist_id#]')
+		  cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
+		  cmd.find('.state').empty().append(_options.display_value+' ')
+		};
+		jeedom.cmd.update['#state_id#']=function(_options) {
+		  let cmd = $('.cmd[data-cmd_id=#state_id#]')
+		  cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
+		  cmd.find('.state').empty().append(_options.display_value+' ')
+		};
+		<div class="cmd cmd-widget history cursor tooltipstered" data-type="info" data-subtype="string" data-template="default" data-cmd_id="3060" data-cmd_uid="cmd3060__1675017354__" data-version="dashboard" data-eqlogic_id="424" data-alertlevel="none">
+  <div class="content-xs">
+    <span class="cmdName ">Tendance</span> <strong class="state">FORECAST_CLOUDY </strong>
+  </div>
+  
+  <script>
+    jeedom.cmd.addUpdateFunction('3060',function(_options) {
+      let cmd = $('.cmd[data-cmd_id=3060]')
+      cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
+      cmd.find('.state').empty().append(_options.display_value+' ')
+      if (_options.alertLevel) {
+        if (_options.alertLevel == 'warning') {
+          cmd.addClass('label label-warning')
+          cmd.attr('data-alertlevel','warning')
+        } else if (_options.alertLevel == 'danger') {
+          cmd.addClass('label label-danger')
+          cmd.attr('data-alertlevel','danger')
+        } else {
+          cmd.removeClass('label label-warning label-danger')
+          cmd.attr('data-alertlevel','none')
+        }
+      }
+    });
+    jeedom.cmd.refreshValue([{cmd_id :'3060',display_value: 'FORECAST_CLOUDY', valueDate: '2023-03-22 03:05:54', collectDate: '2023-03-22 20:57:53', alertLevel: 'none', unit: ''}])
+  </script>
+</div>
+	</script> -->
 	<div class="eq_body_#id#" >
 		<center>
 			<div class="Pan_menu">
@@ -147,19 +216,19 @@
 				<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#cpuusage_id#" data-cmd_uid="cmd#cpuusage_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #cpuusage_collectDate#">
 					<div class="content-xs">
 						<span   class="cmdName">charge CPU: </span>
-						<strong class="state">#cpuusage#</strong>
+						<strong class="state">#cpuusage# %</strong>
 					</div>
 				</div>
 				<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#ram_id#" data-cmd_uid="cmd#ram_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #ram_collectDate#">
 					<div class="content-xs">
 						<span   class="cmdName">charge RAM: </span>
-						<strong class="state">#ram#</strong>
+						<strong class="state">#ram# / #rammax# Mo - #rampercent# %</strong>
 					</div>
 				</div>
 				<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#users_id#" data-cmd_uid="cmd#users_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #users_collectDate#">
 					<div class="content-xs">
 						<span   class="cmdName">nombre de joueurs: </span>
-						<strong class="state">#users#</strong>
+						<strong class="state">#users# / #usermax#</strong>
 					</div>
 				</div>
 				<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#state_id#" data-cmd_uid="cmd#state_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #state_collectDate#">
@@ -199,7 +268,9 @@
 				</div>
 				<div class="tooltips cmd cmd-widget userlist" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#userlist_id#" style="display: block;">
 					<div style="max-width: #widthuserlist#px; max-height: #heightuserlist#px; overflow:auto;">
-						#userlist#
+						<div class="state">
+							#userlist#
+						</div>
 					</div>
 				</div>
 			</div>  <!-- Pan_joueur -->
@@ -209,7 +280,9 @@
 				</div>
 				<div class="tooltips cmd cmd-widget chat" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#chat_id#" style="display: block;">
 					<div style="max-width: #widthchat#px; max-height: #heightchat#px; overflow:auto;">
-						#chat#
+						<div class="state">
+							#chat#
+						</div>
 					</div>
 				</div>
 				<div class="tooltips cmd cmd-widget sendchat" data-type="action" data-subtype="message" data-cmd_id="#sendchat_id#" data-cmd_uid="cmd#sendchat_uid#" data-version="dashboard" data-template="default" data-eqlogic_id="#id#">
@@ -231,7 +304,9 @@
 				</div>
 				<div class="tooltips cmd cmd-widget backuplist" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#backuplist_id#" style="display: block;">
 					<div style="max-width: #widthbackuplist#px; max-height: #heightbackuplist#px; overflow:auto;">
-						#backuplist#
+						<div class="state">
+							#backuplist#
+						</div>
 					</div>
 				</div>
 			</div>  <!-- Pan_backup -->
@@ -242,7 +317,9 @@
 				<div class="tooltips cmd cmd-widget configlist" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#configlist_id#" style="display: block;">
 					<div style="max-width: #widthconfiglist#px; max-height: #heightconfiglist#px; overflow:auto;">
 					<!--<div style="width: 100%; height: 100%; overflow:auto;">-->
-						#configlist#
+						<div class="state">
+							#configlist#
+						</div>
 					</div>
 				</div>
 			</div>  <!-- Pan_config -->
