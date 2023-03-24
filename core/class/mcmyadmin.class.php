@@ -234,44 +234,6 @@ class mcmyadmin extends eqLogic {
     log::add('mcmyadmin','debug',json_encode($result));
     return $result;
   }
-  private function printhtmltable($element,$headtable,$commande) {
-    $list = $element->execCmd();
-    $nom_commande = $element->getLogicalId();
-    /* $table = "<table id=\"dtDynamicVerticalScrollExample#nom_commande#\" class=\"table table-striped table-bordered table-sm\" cellspacing=\"0\"
-    width=\"100%\"><tr style=\"white-space: nowrap;\">";
-    $table = "<table style=\"max-width: 500px; max-height: 100px; overflow: scrool;\" ><tr style=\"white-space: nowrap;\">";
-     */
-    $table = "<table><tr style=\"white-space: nowrap;\">";
-    for($j = 0; count($headtable) > $j; $j++) {
-      $table .= "<th style=\"padding: 5px;\">" . $headtable[$j] . "</th>";
-    }
-    $table .= "</tr>";
-    if ($list != "") {
-      $line = explode("-!-",$list);
-      for($j = 0; count($line) > $j; $j++) {
-        $lineelement = explode("-:-",$line[$j]);
-        $table .= "<tr>";
-        for($k = 0; count($lineelement) > $k; $k++) {
-          $table .= "<td style=\"padding: 5px;\">" . $lineelement[$k] . "</td>";
-        }
-        for($k = 0; count($commande) > $k; $k++) {
-          $bouton_table = str_replace("#value#", $lineelement[0], $commande[$k]);
-          $bouton_table = str_replace("#nom_commande#", $nom_commande, $bouton_table);
-          $table .= "<td>" . $bouton_table . "</td>";
-        }
-        $table .= "</tr>";
-      }
-    }
-    $table .= "</table>";
-    /* $table .= "<script>$(document).ready(function () {
-      $('#dtDynamicVerticalScrollExample#nom_commande#').DataTable({
-        \"scrollY\": \"50vh\",
-        \"scrollCollapse\": true,
-      });
-      $('.dataTables_length').addClass('bs-select');
-    });</script>" */;
-    return $table;
-  }
   public function toHtml($_version = 'dashboard') {
     $replace = $this->preToHtml($_version);
     if (!is_array($replace)) {
@@ -330,41 +292,6 @@ class mcmyadmin extends eqLogic {
       foreach ($parameters as $key => $value) {
         $replace['#' . $key . '#'] = $value;
       }
-    }
-    // generation des tableaux
-    $element = $this->getCmd(null, 'chat');
-    if (is_object($element)) {
-      $list_commande = [];
-      $headtable = ["date","joueur","message"];
-      $replace['#' . $element->getLogicalId() . '#'] = $this->printhtmltable($element,$headtable,$list_commande);
-    }
-    $element = $this->getCmd(null, 'userlist');
-    if (is_object($element)) {
-      $list_commande = [
-      "<div class=\"cmd cmd-widget tooltips #nom_commande##value#\" data-type=\"action\" data-subtype=\"other\" data-template=\"default\" data-cmd_id=\"##nom_commande#_id#\" data-cmd_uid=\"cmd##nom_commande#_uid#\" data-version=\"dashboard\" data-eqlogic_id=\"#id#\">
-        <div class=\"content-xs\">
-          <a class=\"btn btn-sm btn-default #nom_commande##value#kick\">kick</a>
-        </div>
-      </div>
-      <script>
-        $('.cmd[data-cmd_id=##nom_commande#_id#]:last .#nom_commande##value#kick').off('click').on('click', function () {
-          jeedom.cmd.execute({id: '#sendchat_id#', value: {message: '/kick #value#'}})
-        })
-      </script>"];
-      $headtable = ["joueur","IP","date de connexion","kick"];
-      $replace['#' . $element->getLogicalId() . '#'] = $this->printhtmltable($element,$headtable,$list_commande);
-    }
-    $element = $this->getCmd(null, 'configlist');
-    if (is_object($element)) {
-      $list_commande = [];
-      $headtable = ["nom","valeur"];
-      $replace['#' . $element->getLogicalId() . '#'] = $this->printhtmltable($element,$headtable,$list_commande);
-    }
-    $element = $this->getCmd(null, 'backuplist');
-    if (is_object($element)) {
-      $list_commande = [];
-      $headtable = ["nom","date","restaurer","supprimer"];
-      $replace['#' . $element->getLogicalId() . '#'] = $this->printhtmltable($element,$headtable,$list_commande);
     }
     $replace['#heightconfiglist#'] = strval(intval($replace['#height#'])-70);
     $replace['#widthconfiglist#'] = strval(intval($replace['#width#']));
