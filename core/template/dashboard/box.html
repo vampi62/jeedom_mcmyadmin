@@ -32,6 +32,7 @@
 			local_thr.appendChild(local_tr);
 			local_table.appendChild(local_thr);
 			local_tb = document.createElement("tbody");
+			player = new Array();
 			if (list != "") {
 				line = list.split('-!-');
 				for(j = 0; line.length > j; j++) {
@@ -47,7 +48,7 @@
 						local_td = document.createElement("td");
 						bouton_table = commande[k]
 						bouton_table = bouton_table.replaceAll("#value#", lineelement[0]); // remplace value par la valeur de la premiere colonne de la ligne
-						bouton_table = bouton_table.replaceAll("#nom_commande#", nom_tableau); // remplace nom_commande par le nom du tableau
+						player.push(lineelement[0]);
 						local_td.innerHTML = bouton_table;
 						local_tr.appendChild(local_td);
 					}
@@ -59,6 +60,10 @@
 			divtable = document.getElementById(nom_tableau);
 			divtable.innerHTML = "";
 			divtable.appendChild(local_table);
+			
+			for(k = 0; player.length > k; k++) {
+				addkickfunction(player[k]);
+			}
 		}
 	</script>
 	<div class="eq_body_#id#" >
@@ -201,6 +206,14 @@
 								$('.eqLogic[data-eqLogic_uid=#uid#] .mcrestart').show();
 								$('.eqLogic[data-eqLogic_uid=#uid#] .mcreload').show();
 								$('.eqLogic[data-eqLogic_uid=#uid#] .mckill').show();
+							}
+							if (stats == -1) {// retirer toutes les commandes
+								$('.eqLogic[data-eqLogic_uid=#uid#] .mcshutdown').hide();
+								$('.eqLogic[data-eqLogic_uid=#uid#] .mcstart').hide();
+								$('.eqLogic[data-eqLogic_uid=#uid#] .mcsleep').hide();
+								$('.eqLogic[data-eqLogic_uid=#uid#] .mcrestart').hide();
+								$('.eqLogic[data-eqLogic_uid=#uid#] .mcreload').hide();
+								$('.eqLogic[data-eqLogic_uid=#uid#] .mckill').hide();
 							}
 						}
 						updateListButton('#state#');
@@ -363,11 +376,18 @@
 						</div>
 					</div>
 					<script>
+						function addkickfunction (player) {
+							$('.cmd[data-cmd_id=#userlist_id#]:last .#userlist_id#' + player + 'kick').off('click').on('click', function () {
+							jeedom.cmd.execute({id: '#sendchat_id#', value: {message: '/kick ' + player}});
+							jeedom.cmd.execute({id: '#refresh_id#'});
+							});
+						}
 						jeedom.cmd.addUpdateFunction('#userlist_id#',function(_options) {
 							let cmd = $('.cmd[data-cmd_id=#userlist_id#]')
 							let headtable = ["joueur","IP","date de connexion","kick"];
-							let commande = ["<div class=\"cmd cmd-widget tooltips \" data-type=\"action\" data-subtype=\"other\" data-template=\"default\" data-cmd_id=\"#userlist_id#\" data-cmd_uid=\"cmd#userlist_uid#\" data-version=\"dashboard\" data-eqlogic_id=\"#id#\"><div class=\"content-xs\"><a class=\"btn btn-sm btn-default userlist#value#kick\">kick</a></div></div><script>$('.cmd[data-cmd_id=#userlist_id#]:last .userlist#value#kick').off('click').on('click', function () {jeedom.cmd.execute({id: '#sendchat_id#', value: {message: '/kick #value#'}})})<\/script>"];
+							let commande = ["<div class=\"cmd cmd-widget\" data-type=\"action\" data-subtype=\"other\" data-template=\"default\" data-cmd_id=\"#userlist_id#\" data-cmd_uid=\"cmd#userlist_uid#\" data-version=\"dashboard\" data-eqlogic_id=\"#id#\">\<div class=\"content-xs\"><a class=\"btn btn-sm btn-default #userlist_id##value#kick\">kick<\/a><\/div><\/div>"];
 							cmd.find('.state').empty().append(printhtmltable(_options.display_value,'userlist',headtable,commande))
+
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#userlist_id#',display_value: '#userlist#', valueDate: '#userlist_valueDate#', collectDate: '#userlist_collectDate#', alertLevel: '#userlist_alertLevel#'}]);
 					</script>
@@ -395,13 +415,13 @@
 				</div>
 				<div class="tooltips cmd cmd-widget sendchat" data-type="action" data-subtype="message" data-cmd_id="#sendchat_id#" data-cmd_uid="cmd#sendchat_uid#" data-version="dashboard" data-template="default" data-eqlogic_id="#id#">
 					<div class="content-lg">
-						<textarea id="messagemc" class="form-control input-sm message" rows="1" placeholder="Message" data-cmd_id="#sendchat_id#" data-cmd_uid="cmd#sendchat_uid#"></textarea>
+						<textarea id="messagemc#sendchat_id#" class="form-control input-sm message" rows="1" placeholder="Message" data-cmd_id="#sendchat_id#" data-cmd_uid="cmd#sendchat_uid#"></textarea>
 						<a class="btn btn-xs execute">envoyer</a>
 					</div>
 					<script>
 						$('.cmd[data-cmd_id=#sendchat_id#]:last .execute').on('click', function() {
 							jeedom.cmd.execute({id: '#sendchat_id#', value: {message: $('.cmd[data-cmd_id=#sendchat_id#] .message').value()}});
-							document.getElementById("messagemc").value = '';
+							document.getElementById("messagemc#sendchat_id#").value = '';
 						});
 					</script>
 				</div>

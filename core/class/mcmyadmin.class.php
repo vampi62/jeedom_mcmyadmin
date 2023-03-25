@@ -223,6 +223,12 @@ class mcmyadmin extends eqLogic {
     if($result['status'] == 200){
       return $result['MCMASESSIONID'];
     }
+    if($result['status'] == 403){
+      return "403"; // Forbidden
+    }
+    if($result['status'] == 429){
+      return "429"; // Too many requests
+    }
     return "";
   }
   public function request($url) {
@@ -353,7 +359,13 @@ class mcmyadminCmd extends cmd {
       $MCMASESSIONID = $eqlogic->login($url); // login si pas de token
     }
     if($MCMASESSIONID == "") {
-      $eqlogic->checkAndUpdateCmd('state', "hors ligne");
+      $eqlogic->checkAndUpdateCmd('state', "-1");
+      $eqlogic->checkAndUpdateCmd('state_text', "hors ligne");
+      return false;
+    }
+    if($MCMASESSIONID == "403" || $MCMASESSIONID == "429") {
+      $eqlogic->checkAndUpdateCmd('state', "-1");
+      $eqlogic->checkAndUpdateCmd('state_text', "identifiants incorrects");
       return false;
     }
     switch ($this->getLogicalId()) { //vérifie le logicalid de la commande
@@ -484,7 +496,7 @@ class mcmyadminCmd extends cmd {
         $chatlist = array();
         if(count($info['chatdata']) > 0) {
           $nbr_chat_impr = 0;
-          $nbr_ligne_max = $this->getConfiguration("nbrchatlineshow", 10);
+          $nbr_ligne_max = config::byKey('nbrchatlineshow', 'mcmyadmin');
           foreach(array_reverse($info['chatdata']) as $user => $values) { // reverse pour afficher les derniers messages en premier
             if ($values['isChat']) {
               $chatlist[] = date("Y-m-d H:i:s", substr($values['time'],6,-5)) . '-:-' . $values['user'] . '-:-' . $values['message'];

@@ -27,7 +27,7 @@ if (!isConnect()) {
     <div class="form-group">
       <label class="col-md-2 control-label">{{nombre de ligne du chat à afficher}}</label>
       <div class="col-sm-3">
-        <select id="sel_object_geo" class="configKey form-control" data-l1key="freq_geo">
+        <select id="nbrchatlineshow" class="configKey form-control" data-l1key="nbrchatlineshow">
           <option value=5>5</option>
           <option value=10>10</option>
           <option value=15>15</option>

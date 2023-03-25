@@ -27,4 +27,12 @@ function mcmyadmin_update() {
 
 // Fonction exécutée automatiquement après la suppression du plugin
 function mcmyadmin_remove() {
+	$plugin = plugin::byId('mcmyadmin');
+	$eqLogics = eqLogic::byType($plugin->getId(), true);
+  	foreach ($eqLogics as $eqLogic) {
+        if (is_object($eqLogic)) {
+          $eqLogic->remove();
+        }
+    }
+  	config::remove('nbrchatlineshow',$plugin->getId());
 }
