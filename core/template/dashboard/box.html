@@ -32,7 +32,7 @@
 			local_thr.appendChild(local_tr);
 			local_table.appendChild(local_thr);
 			local_tb = document.createElement("tbody");
-			player = new Array();
+			let player = new Array();
 			if (list != "") {
 				line = list.split('-!-');
 				for(j = 0; line.length > j; j++) {
@@ -60,10 +60,7 @@
 			divtable = document.getElementById(nom_tableau);
 			divtable.innerHTML = "";
 			divtable.appendChild(local_table);
-			
-			for(k = 0; player.length > k; k++) {
-				addkickfunction(player[k]);
-			}
+			return player; // retourne la liste des joueurs pour les utiliser dans l'identification les commandes
 		}
 	</script>
 	<div class="eq_body_#id#" >
@@ -371,7 +368,7 @@
 				</div>
 				<div class="tooltips cmd cmd-widget userlist" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#userlist_id#" style="display: block;">
 					<div style="max-width: #widthuserlist#px; max-height: #heightuserlist#px; overflow:auto;">
-						<div class="state" id="userlist">
+						<div class="state" id="userlist#userlist_id#">
 							#userlist#
 						</div>
 					</div>
@@ -383,11 +380,12 @@
 							});
 						}
 						jeedom.cmd.addUpdateFunction('#userlist_id#',function(_options) {
-							let cmd = $('.cmd[data-cmd_id=#userlist_id#]')
 							let headtable = ["joueur","IP","date de connexion","kick"];
 							let commande = ["<div class=\"cmd cmd-widget\" data-type=\"action\" data-subtype=\"other\" data-template=\"default\" data-cmd_id=\"#userlist_id#\" data-cmd_uid=\"cmd#userlist_uid#\" data-version=\"dashboard\" data-eqlogic_id=\"#id#\">\<div class=\"content-xs\"><a class=\"btn btn-sm btn-default #userlist_id##value#kick\">kick<\/a><\/div><\/div>"];
-							cmd.find('.state').empty().append(printhtmltable(_options.display_value,'userlist',headtable,commande))
-
+							let player = printhtmltable(_options.display_value,'userlist#userlist_id#',headtable,commande);
+							for(k = 0; player.length > k; k++) {
+								addkickfunction(player[k]);
+							}
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#userlist_id#',display_value: '#userlist#', valueDate: '#userlist_valueDate#', collectDate: '#userlist_collectDate#', alertLevel: '#userlist_alertLevel#'}]);
 					</script>
@@ -399,16 +397,15 @@
 				</div>
 				<div class="tooltips cmd cmd-widget chat" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#chat_id#" style="display: block;">
 					<div style="max-width: #widthchat#px; max-height: #heightchat#px; overflow:auto;">
-						<div class="state" id="chat">
+						<div class="state" id="chat#chat_id#">
 							#chat#
 						</div>
 					</div>
 					<script>
 						jeedom.cmd.addUpdateFunction('#chat_id#',function(_options) {
-							let cmd = $('.cmd[data-cmd_id=#chat_id#]')
 							headtable = ["date","joueur","message"];
 							commande = [];
-							cmd.find('.state').empty().append(printhtmltable(_options.display_value,'chat',headtable,commande))
+							let player = printhtmltable(_options.display_value,'chat#chat_id#',headtable,commande);
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#chat_id#',display_value: '#chat#', valueDate: '#chat_valueDate#', collectDate: '#chat_collectDate#', alertLevel: '#chat_alertLevel#'}]);
 					</script>
@@ -432,16 +429,15 @@
 				</div>
 				<div class="tooltips cmd cmd-widget backuplist" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#backuplist_id#" style="display: block;">
 					<div style="max-width: #widthbackuplist#px; max-height: #heightbackuplist#px; overflow:auto;">
-						<div class="state" id="backuplist">
+						<div class="state" id="backuplist#backuplist_id#">
 							#backuplist#
 						</div>
 					</div>
 					<script>
 						jeedom.cmd.addUpdateFunction('#backuplist_id#',function(_options) {
-							let cmd = $('.cmd[data-cmd_id=#backuplist_id#]')
 							headtable = ["nom","date","restaurer","supprimer"];
 							commande = [];
-							cmd.find('.state').empty().append(printhtmltable(_options.display_value,'backuplist',headtable,commande))
+							let player = printhtmltable(_options.display_value,'backuplist#backuplist_id#',headtable,commande);
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#backuplist_id#',display_value: '#backuplist#', valueDate: '#backuplist_valueDate#', collectDate: '#backuplist_collectDate#', alertLevel: '#backuplist_alertLevel#'}]);
 					</script>
@@ -453,17 +449,15 @@
 				</div>
 				<div class="tooltips cmd cmd-widget configlist" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#configlist_id#" style="display: block;">
 					<div style="max-width: #widthconfiglist#px; max-height: #heightconfiglist#px; overflow:auto;">
-					<!--<div style="width: 100%; height: 100%; overflow:auto;">-->
-						<div class="state" id="configlist">
+						<div class="state" id="configlist#configlist_id#">
 							#configlist#
 						</div>
 					</div>
 					<script>
 						jeedom.cmd.addUpdateFunction('#configlist_id#',function(_options) {
-							let cmd = $('.cmd[data-cmd_id=#configlist_id#]')
 							headtable = ["nom","valeur"];
 							commande = [];
-							cmd.find('.state').empty().append(printhtmltable(_options.display_value,'configlist',headtable,commande))
+							let player = printhtmltable(_options.display_value,'configlist#configlist_id#',headtable,commande);
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#configlist_id#',display_value: '#configlist#', valueDate: '#configlist_valueDate#', collectDate: '#configlist_collectDate#', alertLevel: '#configlist_alertLevel#'}]);
 					</script>
@@ -571,11 +565,6 @@
 			</script>
 		</table>		
 	</div>
-	<!-- <script>
-		jeedom.cmd.update['#chat_id#'] = function(_options) {
-		  $(".cmd[eqlogic_id=#chat_id#] .chat").val(_options.display_value)
-		}
-	</script> -->
 	<!-- fin table_bottom    -->
 </div>
 <!-- Fin eqLogic-widget  -->
