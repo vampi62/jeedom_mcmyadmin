@@ -17,12 +17,11 @@
 		}else{
 			$('.eqLogic[data-eqLogic_uid=#uid#] .refresh').remove();
 		}
-		function printhtmltable(list,nom_tableau,headtable,commande) {
+		function js_mcmyadmin_printhtmltable(list,nom_tableau,headtable,commande) {
 			local_table = document.createElement("table");
 			local_thr = document.createElement("thead");
 			local_tr = document.createElement("tr");
 			local_tr.setAttribute("style","white-space: nowrap;");
-			
 			for(j = 0; count(headtable) > j; j++) {
 				local_th = document.createElement("th");
 				local_th.setAttribute("style","padding: 5px;");
@@ -77,7 +76,7 @@
 					<script>
 						jeedom.cmd.addUpdateFunction('#backend_id#',function(_options) {
 							let cmd = $('.cmd[data-cmd_id=#backend_id#]')
-							cmd.attr('title', 'Valeur du: '+_options.collectDate)
+							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state').empty().append(_options.display_value)
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#backend_id#',display_value: '#backend#', valueDate: '#backend_valueDate#', collectDate: '#backend_collectDate#', alertLevel: '#backend_alertLevel#'}]);
@@ -91,7 +90,7 @@
 					<script>
 						jeedom.cmd.addUpdateFunction('#mc_id#',function(_options) {
 							let cmd = $('.cmd[data-cmd_id=#mc_id#]')
-							cmd.attr('title', 'Valeur du: '+_options.collectDate)
+							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state').empty().append(_options.display_value)
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#mc_id#',display_value: '#mc#', valueDate: '#mc_valueDate#', collectDate: '#mc_collectDate#', alertLevel: '#mc_alertLevel#'}]);
@@ -216,7 +215,7 @@
 						updateListButton('#state#');
 						jeedom.cmd.addUpdateFunction('#state_id#',function(_options) {
 							let cmd = $('.cmd[data-cmd_id=#state_id#]')
-							cmd.attr('title', 'Valeur du: '+_options.collectDate)
+							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state').empty().append(_options.display_value)
 							updateListButton(_options.display_value);
 						});
@@ -232,7 +231,7 @@
 					<script>
 						jeedom.cmd.addUpdateFunction('#cpuusage_id#',function(_options) {
 							let cmd = $('.cmd[data-cmd_id=#cpuusage_id#]')
-							cmd.attr('title', 'Valeur du: '+_options.collectDate)
+							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state1').empty().append(_options.display_value)
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#cpuusage_id#',display_value: '#cpuusage#', valueDate: '#cpuusage_valueDate#', collectDate: '#cpuusage_collectDate#', alertLevel: '#cpuusage_alertLevel#'}]);
@@ -251,19 +250,19 @@
 					<script>
 						jeedom.cmd.addUpdateFunction('#ram_id#',function(_options) {
 							let cmd = $('.cmd[data-cmd_id=#ram_id#]')
-							cmd.attr('title', 'Valeur du: '+_options.collectDate)
+							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state1').empty().append(_options.display_value)
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#ram_id#',display_value: '#ram#', valueDate: '#ram_valueDate#', collectDate: '#ram_collectDate#', alertLevel: '#ram_alertLevel#'}]);
 						jeedom.cmd.addUpdateFunction('#rammax_id#',function(_options) {
 							let cmd = $('.cmd[data-cmd_id=#rammax_id#]')
-							cmd.attr('title', 'Valeur du: '+_options.collectDate)
+							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state3').empty().append(_options.display_value)
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#rammax_id#',display_value: '#rammax#', valueDate: '#rammax_valueDate#', collectDate: '#rammax_collectDate#', alertLevel: '#rammax_alertLevel#'}]);
 						jeedom.cmd.addUpdateFunction('#rampercent_id#',function(_options) {
 							let cmd = $('.cmd[data-cmd_id=#rampercent_id#]')
-							cmd.attr('title', 'Valeur du: '+_options.collectDate)
+							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state5').empty().append(_options.display_value)
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#rampercent_id#',display_value: '#rampercent#', valueDate: '#rampercent_valueDate#', collectDate: '#rampercent_collectDate#', alertLevel: '#rampercent_alertLevel#'}]);
@@ -279,13 +278,13 @@
 					<script>
 						jeedom.cmd.addUpdateFunction('#users_id#',function(_options) {
 							let cmd = $('.cmd[data-cmd_id=#users_id#]')
-							cmd.attr('title', 'Valeur du: '+_options.collectDate)
+							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state1').empty().append(_options.display_value)
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#users_id#',display_value: '#users#', valueDate: '#users_valueDate#', collectDate: '#users_collectDate#', alertLevel: '#users_alertLevel#'}]);
 						jeedom.cmd.addUpdateFunction('#usermax_id#',function(_options) {
 							let cmd = $('.cmd[data-cmd_id=#usermax_id#]')
-							cmd.attr('title', 'Valeur du: '+_options.collectDate)
+							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state3').empty().append(_options.display_value)
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#usermax_id#',display_value: '#usermax#', valueDate: '#usermax_valueDate#', collectDate: '#usermax_collectDate#', alertLevel: '#usermax_alertLevel#'}]);
@@ -299,7 +298,7 @@
 					<script>
 						jeedom.cmd.addUpdateFunction('#state_text_id#',function(_options) {
 							let cmd = $('.cmd[data-cmd_id=#state_text_id#]')
-							cmd.attr('title', 'Valeur du: '+_options.collectDate)
+							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state').empty().append(_options.display_value)
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#state_text_id#',display_value: '#state_text#', valueDate: '#state_text_valueDate#', collectDate: '#state_text_collectDate#', alertLevel: '#state_text_alertLevel#'}]);
@@ -313,7 +312,7 @@
 					<script>
 						jeedom.cmd.addUpdateFunction('#starttime_id#',function(_options) {
 							let cmd = $('.cmd[data-cmd_id=#starttime_id#]')
-							cmd.attr('title', 'Valeur du: '+_options.collectDate)
+							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state').empty().append(_options.display_value)
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#starttime_id#',display_value: '#starttime#', valueDate: '#starttime_valueDate#', collectDate: '#starttime_collectDate#', alertLevel: '#starttime_alertLevel#'}]);
@@ -327,7 +326,7 @@
 					<script>
 						jeedom.cmd.addUpdateFunction('#time_id#',function(_options) {
 							let cmd = $('.cmd[data-cmd_id=#time_id#]')
-							cmd.attr('title', 'Valeur du: '+_options.collectDate)
+							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state').empty().append(_options.display_value)
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#time_id#',display_value: '#time#', valueDate: '#time_valueDate#', collectDate: '#time_collectDate#', alertLevel: '#time_alertLevel#'}]);
@@ -341,7 +340,7 @@
 					<script>
 						jeedom.cmd.addUpdateFunction('#failed_id#',function(_options) {
 							let cmd = $('.cmd[data-cmd_id=#failed_id#]')
-							cmd.attr('title', 'Valeur du: '+_options.collectDate)
+							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state').empty().append(_options.display_value)
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#failed_id#',display_value: '#failed#', valueDate: '#failed_valueDate#', collectDate: '#failed_collectDate#', alertLevel: '#failed_alertLevel#'}]);
@@ -355,7 +354,7 @@
 					<script>
 						jeedom.cmd.addUpdateFunction('#failmsg_id#',function(_options) {
 							let cmd = $('.cmd[data-cmd_id=#failmsg_id#]')
-							cmd.attr('title', 'Valeur du: '+_options.collectDate)
+							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state').empty().append(_options.display_value)
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#failmsg_id#',display_value: '#failmsg#', valueDate: '#failmsg_valueDate#', collectDate: '#failmsg_collectDate#', alertLevel: '#failmsg_alertLevel#'}]);
@@ -382,7 +381,7 @@
 						jeedom.cmd.addUpdateFunction('#userlist_id#',function(_options) {
 							let headtable = ["joueur","IP","date de connexion","kick"];
 							let commande = ["<div class=\"cmd cmd-widget\" data-type=\"action\" data-subtype=\"other\" data-template=\"default\" data-cmd_id=\"#userlist_id#\" data-cmd_uid=\"cmd#userlist_uid#\" data-version=\"dashboard\" data-eqlogic_id=\"#id#\">\<div class=\"content-xs\"><a class=\"btn btn-sm btn-default #userlist_id##value#kick\">kick<\/a><\/div><\/div>"];
-							let player = printhtmltable(_options.display_value,'userlist#userlist_id#',headtable,commande);
+							let player = js_mcmyadmin_printhtmltable(_options.display_value,'userlist#userlist_id#',headtable,commande);
 							for(k = 0; player.length > k; k++) {
 								addkickfunction(player[k]);
 							}
@@ -405,7 +404,7 @@
 						jeedom.cmd.addUpdateFunction('#chat_id#',function(_options) {
 							headtable = ["date","joueur","message"];
 							commande = [];
-							let player = printhtmltable(_options.display_value,'chat#chat_id#',headtable,commande);
+							let player = js_mcmyadmin_printhtmltable(_options.display_value,'chat#chat_id#',headtable,commande);
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#chat_id#',display_value: '#chat#', valueDate: '#chat_valueDate#', collectDate: '#chat_collectDate#', alertLevel: '#chat_alertLevel#'}]);
 					</script>
@@ -437,7 +436,7 @@
 						jeedom.cmd.addUpdateFunction('#backuplist_id#',function(_options) {
 							headtable = ["nom","date","restaurer","supprimer"];
 							commande = [];
-							let player = printhtmltable(_options.display_value,'backuplist#backuplist_id#',headtable,commande);
+							let player = js_mcmyadmin_printhtmltable(_options.display_value,'backuplist#backuplist_id#',headtable,commande);
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#backuplist_id#',display_value: '#backuplist#', valueDate: '#backuplist_valueDate#', collectDate: '#backuplist_collectDate#', alertLevel: '#backuplist_alertLevel#'}]);
 					</script>
@@ -457,7 +456,7 @@
 						jeedom.cmd.addUpdateFunction('#configlist_id#',function(_options) {
 							headtable = ["nom","valeur"];
 							commande = [];
-							let player = printhtmltable(_options.display_value,'configlist#configlist_id#',headtable,commande);
+							let player = js_mcmyadmin_printhtmltable(_options.display_value,'configlist#configlist_id#',headtable,commande);
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#configlist_id#',display_value: '#configlist#', valueDate: '#configlist_valueDate#', collectDate: '#configlist_collectDate#', alertLevel: '#configlist_alertLevel#'}]);
 					</script>
