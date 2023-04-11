@@ -17,7 +17,7 @@
 		}else{
 			$('.eqLogic[data-eqLogic_uid=#uid#] .refresh').remove();
 		}
-		function js_mcmyadmin_printhtmltable(list,nom_tableau,headtable,commande) {
+		function #uid#js_mcmyadmin_printhtmltable(list,nom_tableau,headtable,commande) {
 			local_table = document.createElement("table");
 			local_thr = document.createElement("thead");
 			local_tr = document.createElement("tr");
@@ -153,7 +153,7 @@
 						})
 					</script>
 					<script>
-						function updateListButton(stats) {
+						function #uid#updateListButton(stats) {
 							if (stats == 0) { // eteint
 								$('.eqLogic[data-eqLogic_uid=#uid#] .mcshutdown').hide();
 								$('.eqLogic[data-eqLogic_uid=#uid#] .mcstart').show();
@@ -211,12 +211,12 @@
 								$('.eqLogic[data-eqLogic_uid=#uid#] .mckill').hide();
 							}
 						}
-						updateListButton('#state#');
+						#uid#updateListButton('#state#');
 						jeedom.cmd.addUpdateFunction('#state_id#',function(_options) {
 							let cmd = $('.cmd[data-cmd_id=#state_id#]')
 							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state').empty().append(_options.display_value)
-							updateListButton(_options.display_value);
+							#uid#updateListButton(_options.display_value);
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#state_id#',display_value: '#state#', valueDate: '#state_valueDate#', collectDate: '#state_collectDate#', alertLevel: '#state_alertLevel#'}]);
 					</script>
@@ -371,7 +371,7 @@
 						</div>
 					</div>
 					<script>
-						function addkickfunction (player) {
+						function #uid#addkickfunction (player) {
 							$('.cmd[data-cmd_id=#userlist_id#]:last .#userlist_id#' + player + 'kick').off('click').on('click', function () {
 							jeedom.cmd.execute({id: '#sendchat_id#', value: {message: '/kick ' + player}});
 							jeedom.cmd.execute({id: '#refresh_id#'});
@@ -380,9 +380,9 @@
 						jeedom.cmd.addUpdateFunction('#userlist_id#',function(_options) {
 							let headtable = ["joueur","IP","date de connexion","kick"];
 							let commande = ["<div class=\"cmd cmd-widget\" data-type=\"action\" data-subtype=\"other\" data-template=\"default\" data-cmd_id=\"#userlist_id#\" data-cmd_uid=\"cmd#userlist_uid#\" data-version=\"dashboard\" data-eqlogic_id=\"#id#\">\<div class=\"content-xs\"><a class=\"btn btn-sm btn-default #userlist_id##value#kick\">kick<\/a><\/div><\/div>"];
-							let player = js_mcmyadmin_printhtmltable(_options.display_value,'#userlist_id#',headtable,commande);
+							let player = #uid#js_mcmyadmin_printhtmltable(_options.display_value,'#userlist_id#',headtable,commande);
 							for(k = 0; player.length > k; k++) {
-								addkickfunction(player[k]);
+								#uid#addkickfunction(player[k]);
 							}
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#userlist_id#',display_value: '#userlist#', valueDate: '#userlist_valueDate#', collectDate: '#userlist_collectDate#', alertLevel: '#userlist_alertLevel#'}]);
@@ -403,7 +403,7 @@
 						jeedom.cmd.addUpdateFunction('#chat_id#',function(_options) {
 							headtable = ["date","joueur","message"];
 							commande = [];
-							let player = js_mcmyadmin_printhtmltable(_options.display_value,'#chat_id#',headtable,commande);
+							let player = #uid#js_mcmyadmin_printhtmltable(_options.display_value,'#chat_id#',headtable,commande);
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#chat_id#',display_value: '#chat#', valueDate: '#chat_valueDate#', collectDate: '#chat_collectDate#', alertLevel: '#chat_alertLevel#'}]);
 					</script>
@@ -436,7 +436,7 @@
 						jeedom.cmd.addUpdateFunction('#backuplist_id#',function(_options) {
 							headtable = ["nom","date","restaurer","supprimer"];
 							commande = [];
-							let player = js_mcmyadmin_printhtmltable(_options.display_value,'#backuplist_id#',headtable,commande);
+							let player = #uid#js_mcmyadmin_printhtmltable(_options.display_value,'#backuplist_id#',headtable,commande);
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#backuplist_id#',display_value: '#backuplist#', valueDate: '#backuplist_valueDate#', collectDate: '#backuplist_collectDate#', alertLevel: '#backuplist_alertLevel#'}]);
 					</script>
@@ -456,7 +456,7 @@
 						jeedom.cmd.addUpdateFunction('#configlist_id#',function(_options) {
 							headtable = ["nom","valeur"];
 							commande = [];
-							let player = js_mcmyadmin_printhtmltable(_options.display_value,'#configlist_id#',headtable,commande);
+							let player = #uid#js_mcmyadmin_printhtmltable(_options.display_value,'#configlist_id#',headtable,commande);
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#configlist_id#',display_value: '#configlist#', valueDate: '#configlist_valueDate#', collectDate: '#configlist_collectDate#', alertLevel: '#configlist_alertLevel#'}]);
 					</script>
