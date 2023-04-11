@@ -56,9 +56,8 @@
 			}
 			local_table.appendChild(local_tb);
 			local_table.setAttribute("class","table table-condensed table-bordered table-striped");
-			divtable = document.getElementById(nom_tableau);
-			divtable.innerHTML = "";
-			divtable.appendChild(local_table);
+			$('.cmd[data-eqlogic_id=' + nom_tableau + '] .state').empty();
+			$('.cmd[data-eqlogic_id=' + nom_tableau + '] .state').append(local_table);
 			return player; // retourne la liste des joueurs pour les utiliser dans l'identification les commandes
 		}
 	</script>
@@ -367,7 +366,7 @@
 				</div>
 				<div class="tooltips cmd cmd-widget userlist" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#userlist_id#" style="display: block;">
 					<div style="max-width: #widthuserlist#px; max-height: #heightuserlist#px; overflow:auto;">
-						<div class="state" id="userlist#userlist_id#">
+						<div class="state">
 							#userlist#
 						</div>
 					</div>
@@ -381,7 +380,7 @@
 						jeedom.cmd.addUpdateFunction('#userlist_id#',function(_options) {
 							let headtable = ["joueur","IP","date de connexion","kick"];
 							let commande = ["<div class=\"cmd cmd-widget\" data-type=\"action\" data-subtype=\"other\" data-template=\"default\" data-cmd_id=\"#userlist_id#\" data-cmd_uid=\"cmd#userlist_uid#\" data-version=\"dashboard\" data-eqlogic_id=\"#id#\">\<div class=\"content-xs\"><a class=\"btn btn-sm btn-default #userlist_id##value#kick\">kick<\/a><\/div><\/div>"];
-							let player = js_mcmyadmin_printhtmltable(_options.display_value,'userlist#userlist_id#',headtable,commande);
+							let player = js_mcmyadmin_printhtmltable(_options.display_value,'#userlist_id#',headtable,commande);
 							for(k = 0; player.length > k; k++) {
 								addkickfunction(player[k]);
 							}
@@ -396,7 +395,7 @@
 				</div>
 				<div class="tooltips cmd cmd-widget chat" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#chat_id#" style="display: block;">
 					<div style="max-width: #widthchat#px; max-height: #heightchat#px; overflow:auto;">
-						<div class="state" id="chat#chat_id#">
+						<div class="state">
 							#chat#
 						</div>
 					</div>
@@ -404,20 +403,21 @@
 						jeedom.cmd.addUpdateFunction('#chat_id#',function(_options) {
 							headtable = ["date","joueur","message"];
 							commande = [];
-							let player = js_mcmyadmin_printhtmltable(_options.display_value,'chat#chat_id#',headtable,commande);
+							let player = js_mcmyadmin_printhtmltable(_options.display_value,'#chat_id#',headtable,commande);
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#chat_id#',display_value: '#chat#', valueDate: '#chat_valueDate#', collectDate: '#chat_collectDate#', alertLevel: '#chat_alertLevel#'}]);
 					</script>
 				</div>
 				<div class="tooltips cmd cmd-widget sendchat" data-type="action" data-subtype="message" data-cmd_id="#sendchat_id#" data-cmd_uid="cmd#sendchat_uid#" data-version="dashboard" data-template="default" data-eqlogic_id="#id#">
 					<div class="content-lg">
-						<textarea id="messagemc#sendchat_id#" class="form-control input-sm message" rows="1" placeholder="Message" data-cmd_id="#sendchat_id#" data-cmd_uid="cmd#sendchat_uid#"></textarea>
+						<textarea class="form-control input-sm message" rows="1" placeholder="Message" data-cmd_id="#sendchat_id#" data-cmd_uid="cmd#sendchat_uid#"></textarea>
 						<a class="btn btn-xs execute">envoyer</a>
 					</div>
 					<script>
 						$('.cmd[data-cmd_id=#sendchat_id#]:last .execute').on('click', function() {
 							jeedom.cmd.execute({id: '#sendchat_id#', value: {message: $('.cmd[data-cmd_id=#sendchat_id#] .message').value()}});
-							document.getElementById("messagemc#sendchat_id#").value = '';
+							// vide le champ de saisie du message
+							$('.cmd[data-cmd_id=#sendchat_id#] .message').val('');
 						});
 					</script>
 				</div>
@@ -428,7 +428,7 @@
 				</div>
 				<div class="tooltips cmd cmd-widget backuplist" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#backuplist_id#" style="display: block;">
 					<div style="max-width: #widthbackuplist#px; max-height: #heightbackuplist#px; overflow:auto;">
-						<div class="state" id="backuplist#backuplist_id#">
+						<div class="state">
 							#backuplist#
 						</div>
 					</div>
@@ -436,7 +436,7 @@
 						jeedom.cmd.addUpdateFunction('#backuplist_id#',function(_options) {
 							headtable = ["nom","date","restaurer","supprimer"];
 							commande = [];
-							let player = js_mcmyadmin_printhtmltable(_options.display_value,'backuplist#backuplist_id#',headtable,commande);
+							let player = js_mcmyadmin_printhtmltable(_options.display_value,'#backuplist_id#',headtable,commande);
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#backuplist_id#',display_value: '#backuplist#', valueDate: '#backuplist_valueDate#', collectDate: '#backuplist_collectDate#', alertLevel: '#backuplist_alertLevel#'}]);
 					</script>
@@ -448,7 +448,7 @@
 				</div>
 				<div class="tooltips cmd cmd-widget configlist" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#configlist_id#" style="display: block;">
 					<div style="max-width: #widthconfiglist#px; max-height: #heightconfiglist#px; overflow:auto;">
-						<div class="state" id="configlist#configlist_id#">
+						<div class="state">
 							#configlist#
 						</div>
 					</div>
@@ -456,7 +456,7 @@
 						jeedom.cmd.addUpdateFunction('#configlist_id#',function(_options) {
 							headtable = ["nom","valeur"];
 							commande = [];
-							let player = js_mcmyadmin_printhtmltable(_options.display_value,'configlist#configlist_id#',headtable,commande);
+							let player = js_mcmyadmin_printhtmltable(_options.display_value,'#configlist_id#',headtable,commande);
 						});
 						jeedom.cmd.refreshValue([{cmd_id :'#configlist_id#',display_value: '#configlist#', valueDate: '#configlist_valueDate#', collectDate: '#configlist_collectDate#', alertLevel: '#configlist_alertLevel#'}]);
 					</script>
