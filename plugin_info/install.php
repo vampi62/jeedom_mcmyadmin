@@ -23,6 +23,9 @@ function mcmyadmin_install() {
 
 // Fonction exécutée automatiquement après la mise à jour du plugin
 function mcmyadmin_update() {
+	foreach (eqLogic::byType('mcmyadmin') as $mcmyadmin) {
+		$mcmyadmin->save();
+	}
 }
 
 // Fonction exécutée automatiquement après la suppression du plugin
