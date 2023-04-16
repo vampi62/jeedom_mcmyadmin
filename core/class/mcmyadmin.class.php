@@ -383,12 +383,14 @@ class mcmyadminCmd extends cmd {
         }
         $playerlist = array();
         if(count($info['userinfo']) > 0) {
+          $eqlogic->checkAndUpdateCmd('users', count($info['userinfo']));
           foreach($info['userinfo'] as $user => $values) {
             $playerlist[] = $values['Name'] . "-:-" . $values['IP'] . "-:-" . date("Y-m-d H:i:s", substr($values['ConnectTime'],6,-5));
           }
           $playerlist = implode("-!-", $playerlist);
         }
         else {
+          $eqlogic->checkAndUpdateCmd('users', 0);
           $playerlist = "";
         }
         $eqlogic->checkAndUpdateCmd('state', $info['state']);
@@ -419,7 +421,6 @@ class mcmyadminCmd extends cmd {
         $eqlogic->checkAndUpdateCmd('failed', $info['failed']);
         $eqlogic->checkAndUpdateCmd('failmsg', $info['failmsg']);
         //$eqlogic->set_limit_element('users',0,$info['maxusers']);
-        $eqlogic->checkAndUpdateCmd('users', count($info['userlist']));
         $eqlogic->checkAndUpdateCmd('usermax', $info['maxusers']);
         $eqlogic->checkAndUpdateCmd('userlist', $playerlist);
         $eqlogic->checkAndUpdateCmd('time', $info['time']);
