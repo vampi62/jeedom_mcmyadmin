@@ -233,12 +233,15 @@ class mcmyadmin extends eqLogic {
   }
   public function request($url) {
     $request_http = new com_http($url);
+    $request_http->setNoReportError(true);
     $request_http->setHeader(array('Content-type: application/json','Accept: application/json'));
     $result=$request_http->exec();
-    $result = json_decode($result,true);
+    if ($result == "") {
+      return "";
+    }
     log::add('mcmyadmin','debug',$url);
-    log::add('mcmyadmin','debug',json_encode($result));
-    return $result;
+    log::add('mcmyadmin','debug',$result);
+    return json_decode($result,true);
   }
   public function toHtml($_version = 'dashboard') {
     $replace = $this->preToHtml($_version);
