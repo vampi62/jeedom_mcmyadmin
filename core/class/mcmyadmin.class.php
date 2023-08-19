@@ -220,6 +220,9 @@ class mcmyadmin extends eqLogic {
   
   public function login($url) {
     $result = $this->request($url . "&req=login" . "&Token=");
+    if ($result == "") {
+      return "";
+    }
     if($result['status'] == 200){
       return $result['MCMASESSIONID'];
     }
