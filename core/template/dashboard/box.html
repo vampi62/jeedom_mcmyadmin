@@ -78,7 +78,6 @@
 							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state').empty().append(_options.display_value)
 						});
-						jeedom.cmd.refreshValue([{cmd_id :'#backend_id#',display_value: '#backend#', valueDate: '#backend_valueDate#', collectDate: '#backend_collectDate#', alertLevel: '#backend_alertLevel#'}]);
 					</script>
 				</div>
 				<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="string" data-cmd_id="#mc_id#" data-cmd_uid="cmd#uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #mc_collectDate#">
@@ -92,7 +91,6 @@
 							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state').empty().append(_options.display_value)
 						});
-						jeedom.cmd.refreshValue([{cmd_id :'#mc_id#',display_value: '#mc#', valueDate: '#mc_valueDate#', collectDate: '#mc_collectDate#', alertLevel: '#mc_alertLevel#'}]);
 					</script>
 				</div>
 				<div>
@@ -218,7 +216,6 @@
 							cmd.find('.state').empty().append(_options.display_value)
 							#uid#updateListButton(_options.display_value);
 						});
-						jeedom.cmd.refreshValue([{cmd_id :'#state_id#',display_value: '#state#', valueDate: '#state_valueDate#', collectDate: '#state_collectDate#', alertLevel: '#state_alertLevel#'}]);
 					</script>
 				</div>
 				<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#cpuusage_id#" data-cmd_uid="cmd#cpuusage_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #cpuusage_collectDate#">
@@ -233,7 +230,6 @@
 							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state1').empty().append(_options.display_value)
 						});
-						jeedom.cmd.refreshValue([{cmd_id :'#cpuusage_id#',display_value: '#cpuusage#', valueDate: '#cpuusage_valueDate#', collectDate: '#cpuusage_collectDate#', alertLevel: '#cpuusage_alertLevel#'}]);
 					</script>
 				</div>
 				<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#ram_id#" data-cmd_uid="cmd#ram_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #ram_collectDate#">
@@ -252,19 +248,16 @@
 							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state1').empty().append(_options.display_value)
 						});
-						jeedom.cmd.refreshValue([{cmd_id :'#ram_id#',display_value: '#ram#', valueDate: '#ram_valueDate#', collectDate: '#ram_collectDate#', alertLevel: '#ram_alertLevel#'}]);
 						jeedom.cmd.addUpdateFunction('#rammax_id#',function(_options) {
 							let cmd = $('.cmd[data-cmd_id=#rammax_id#]')
 							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state3').empty().append(_options.display_value)
 						});
-						jeedom.cmd.refreshValue([{cmd_id :'#rammax_id#',display_value: '#rammax#', valueDate: '#rammax_valueDate#', collectDate: '#rammax_collectDate#', alertLevel: '#rammax_alertLevel#'}]);
 						jeedom.cmd.addUpdateFunction('#rampercent_id#',function(_options) {
 							let cmd = $('.cmd[data-cmd_id=#rampercent_id#]')
 							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state5').empty().append(_options.display_value)
 						});
-						jeedom.cmd.refreshValue([{cmd_id :'#rampercent_id#',display_value: '#rampercent#', valueDate: '#rampercent_valueDate#', collectDate: '#rampercent_collectDate#', alertLevel: '#rampercent_alertLevel#'}]);
 					</script>
 				</div>
 				<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#users_id#" data-cmd_uid="cmd#users_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #users_collectDate#">
@@ -280,13 +273,11 @@
 							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state1').empty().append(_options.display_value)
 						});
-						jeedom.cmd.refreshValue([{cmd_id :'#users_id#',display_value: '#users#', valueDate: '#users_valueDate#', collectDate: '#users_collectDate#', alertLevel: '#users_alertLevel#'}]);
 						jeedom.cmd.addUpdateFunction('#usermax_id#',function(_options) {
 							let cmd = $('.cmd[data-cmd_id=#usermax_id#]')
 							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state3').empty().append(_options.display_value)
 						});
-						jeedom.cmd.refreshValue([{cmd_id :'#usermax_id#',display_value: '#usermax#', valueDate: '#usermax_valueDate#', collectDate: '#usermax_collectDate#', alertLevel: '#usermax_alertLevel#'}]);
 					</script>
 				</div>
 				<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#state_text_id#" data-cmd_uid="cmd#state_text_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #state_text_collectDate#">
@@ -300,7 +291,6 @@
 							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state').empty().append(_options.display_value)
 						});
-						jeedom.cmd.refreshValue([{cmd_id :'#state_text_id#',display_value: '#state_text#', valueDate: '#state_text_valueDate#', collectDate: '#state_text_collectDate#', alertLevel: '#state_text_alertLevel#'}]);
 					</script>
 				</div>
 				<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#starttime_id#" data-cmd_uid="cmd#starttime_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #starttime_collectDate#">
@@ -314,7 +304,6 @@
 							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state').empty().append(_options.display_value)
 						});
-						jeedom.cmd.refreshValue([{cmd_id :'#starttime_id#',display_value: '#starttime#', valueDate: '#starttime_valueDate#', collectDate: '#starttime_collectDate#', alertLevel: '#starttime_alertLevel#'}]);
 					</script>
 				</div>
 				<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#time_id#" data-cmd_uid="cmd#time_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #time_collectDate#">
@@ -328,7 +317,6 @@
 							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state').empty().append(_options.display_value)
 						});
-						jeedom.cmd.refreshValue([{cmd_id :'#time_id#',display_value: '#time#', valueDate: '#time_valueDate#', collectDate: '#time_collectDate#', alertLevel: '#time_alertLevel#'}]);
 					</script>
 				</div>
 				<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#failed_id#" data-cmd_uid="cmd#failed_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #failed_collectDate#">
@@ -342,7 +330,6 @@
 							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state').empty().append(_options.display_value)
 						});
-						jeedom.cmd.refreshValue([{cmd_id :'#failed_id#',display_value: '#failed#', valueDate: '#failed_valueDate#', collectDate: '#failed_collectDate#', alertLevel: '#failed_alertLevel#'}]);
 					</script>
 				</div>
 				<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#failmsg_id#" data-cmd_uid="cmd#failmsg_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #failmsg_collectDate#">
@@ -356,7 +343,6 @@
 							cmd.attr('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 							cmd.find('.state').empty().append(_options.display_value)
 						});
-						jeedom.cmd.refreshValue([{cmd_id :'#failmsg_id#',display_value: '#failmsg#', valueDate: '#failmsg_valueDate#', collectDate: '#failmsg_collectDate#', alertLevel: '#failmsg_alertLevel#'}]);
 					</script>
 				</div>
 			</div> <!-- Pan_menu -->
@@ -367,7 +353,6 @@
 				<div class="tooltips cmd cmd-widget userlist" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#userlist_id#" style="display: block;">
 					<div style="max-width: #widthuserlist#px; max-height: #heightuserlist#px; overflow:auto;">
 						<div class="state">
-							#userlist#
 						</div>
 					</div>
 					<script>
@@ -396,7 +381,6 @@
 				<div class="tooltips cmd cmd-widget chat" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#chat_id#" style="display: block;">
 					<div style="max-width: #widthchat#px; max-height: #heightchat#px; overflow:auto;">
 						<div class="state">
-							#chat#
 						</div>
 					</div>
 					<script>
@@ -429,7 +413,6 @@
 				<div class="tooltips cmd cmd-widget backuplist" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#backuplist_id#" style="display: block;">
 					<div style="max-width: #widthbackuplist#px; max-height: #heightbackuplist#px; overflow:auto;">
 						<div class="state">
-							#backuplist#
 						</div>
 					</div>
 					<script>
@@ -449,7 +432,6 @@
 				<div class="tooltips cmd cmd-widget configlist" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#configlist_id#" style="display: block;">
 					<div style="max-width: #widthconfiglist#px; max-height: #heightconfiglist#px; overflow:auto;">
 						<div class="state">
-							#configlist#
 						</div>
 					</div>
 					<script>
