@@ -19,6 +19,7 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 // Fonction exécutée automatiquement après l'installation du plugin
 function mcmyadmin_install() {
+	config::save('nbrchatlineshow','5','mcmyadmin');
 }
 
 // Fonction exécutée automatiquement après la mise à jour du plugin
@@ -32,10 +33,10 @@ function mcmyadmin_update() {
 function mcmyadmin_remove() {
 	$plugin = plugin::byId('mcmyadmin');
 	$eqLogics = eqLogic::byType($plugin->getId(), true);
-  	foreach ($eqLogics as $eqLogic) {
-        if (is_object($eqLogic)) {
-          $eqLogic->remove();
-        }
-    }
-  	config::remove('nbrchatlineshow',$plugin->getId());
+	foreach ($eqLogics as $eqLogic) {
+		if (is_object($eqLogic)) {
+			$eqLogic->remove();
+		}
+	}
+	config::remove('nbrchatlineshow','mcmyadmin');
 }
