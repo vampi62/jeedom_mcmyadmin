@@ -22,7 +22,7 @@
 			local_thr = document.createElement("thead");
 			local_tr = document.createElement("tr");
 			local_tr.setAttribute("style","white-space: nowrap;");
-			for(j = 0; count(headtable) > j; j++) {
+			for(j = 0; headtable.length > j; j++) {
 				local_th = document.createElement("th");
 				local_th.setAttribute("style","padding: 5px;");
 				local_th.innerHTML = headtable[j];
