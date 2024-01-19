@@ -164,7 +164,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 									<sup><i class="fas fa-question-circle tooltips" title="{{ entrer le protocole utiliser : http ou https}}"></i></sup>
 								</label>
 								<div class="col-sm-6">
-									<select id="protocol" class="configKey form-control" data-l1key="configuration" data-l2key="protocol">
+									<select id="protocol" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="protocol">
 										<option value="http">http</option>
 										<option value="https">https</option>
 									</select>
