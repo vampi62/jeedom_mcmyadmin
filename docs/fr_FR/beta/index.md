@@ -1,53 +1,67 @@
 # Plugin mcmyadmin
 
-ce plugin permet de connecter un serveur minecraft utilisant le panel mcmyadmin.
+Ce plugin permet de connecter un serveur Minecraft utilisant le panel mcmyadmin.
 
-le panel mcmyadmin est gratuit pour 10 joueurs est peut être telecharger sur le site officiel : https://mcmyadmin.com/
-il existe aussi une image sur dockerhub : tekgator/docker-mcmyadmin:latest
+Le panel mcmyadmin est gratuit pour 10 joueurs et peut être téléchargé sur le site officiel : https://mcmyadmin.com/. Il existe aussi une image sur DockerHub : tekgator/docker-mcmyadmin:latest
 
-le plugin permet à jeedom d'effectuer des actions de base tel que :
-- le demarrage, l'arret ou le restart du serveur.
-- le poste de message ou commande dans la console du serveur.
-- le listing des utilisateur connecter, des derniers messages du chat et la configuration du serveur.
+Le plugin permet à Jeedom d'effectuer des actions de base telles que :
+- Le démarrage, l'arrêt ou le redémarrage du serveur.
+- Le poste de message ou de commande dans la console du serveur.
+- La liste des utilisateurs connectés, des derniers messages du chat et la configuration du serveur.
 
+## 1. Configuration
 
-1. configuration
-vous pouvez choisir sur cette page le nombre de message du chat recuperer sur chaque serveur.
-![plugin](capture/configplugin.PNG)
+Vous pouvez choisir sur cette page le nombre de messages du chat à récupérer sur chaque serveur.
 
-2. configuration du compte sur mcmyadmin
+![Configuration du plugin](capture/configplugin.PNG)
 
-creer un compte sur le serveur mcmyadmin.
-(ce compte ne doit servir qu'à la communication avec jeedom)
-pour ce faire aller sur Configuration > login users
-le compte doit disposer au minimun des droits selectionner dans l'image ci-dessous 
-![droits](capture/droitsmcmyadmin.PNG)
+## 2. Configuration du compte sur mcmyadmin
 
-3. configuration du serveur sur jeedom
+Créez un compte sur le serveur mcmyadmin. (Ce compte ne doit servir qu'à la communication avec Jeedom). Pour ce faire, allez sur Configuration > Login Users. Le compte doit disposer au minimum des droits sélectionnés dans l'image ci-dessous.
 
-renseigner les information de connection
-ip ou nom de domaine si le serveur setrouve en dehors du reseau de jeedom
-port du serveur
-nom de l'utilisateur creer
-mot de passe de l'utilisateur creer
-selection http ou https
-note : la communication en https n'a pas été tester.(merci de me faire un retour si vous disposer d'un serveur en https)
-![objet](capture/configobjet.PNG)
+![Droits mcmyadmin](capture/droitsmcmyadmin.PNG)
 
-4. Widget
-dans le dashboard, en bas de la tuile de votre objet il y a plusieurs icon, ces icon sont clicable est permet de naviger entre les vues de la tuile(menu, joueurs, chat, backup, config)
-4.1. menu
-dans menu (page par defaut) vous pouvez acceder au commande du serveur et autre info global
-![menu](capture/menu.PNG)
-4.2. joueurs
-joueurs, la liste des joueurs connecter avec la possibiliter de les kick du serveur
-![joueurs](capture/joueurs.PNG)
-4.3. chat
-chat, poster des message dans le chat ou utiliser "/" au debut pour envoyer une commande dans la console
-![chat](capture/chat.PNG)
-4.4. backups
-backup, liste des backups (pas d'action disponible pour le moment)
-![backups](capture/backup.PNG)
-4.5. config
-config, liste des config du serveur minecraft et du panel (pas d'action disponible pour le moment)
-![config](capture/config.PNG)
+## 3. Configuration du serveur sur Jeedom
+
+Renseignez les informations de connexion :
+- IP ou nom de domaine si le serveur se trouve en dehors du réseau de Jeedom
+- Port du serveur
+- pseudo de l'utilisateur sur mcmyadmin
+- Mot de passe de l'utilisateur sur mcmyadmin
+- Sélection HTTP ou HTTPS
+
+![Configuration de l'objet](capture/configobjet.PNG)
+
+## 4. Widget
+
+Dans le dashboard, en bas de la tuile de votre objet, il y a plusieurs icônes cliquables permettant de naviguer entre les vues de la tuile (menu, joueurs, chat, backup, config).
+
+### 4.1. Menu
+
+Dans le menu (page par défaut), vous pouvez accéder aux commandes du serveur et autres informations globales.
+
+![Vue Menu](capture/menu.PNG)
+
+### 4.2. Joueurs
+
+La liste des joueurs connectés avec la possibilité de les expulser du serveur.
+
+![Vue Joueurs](capture/joueurs.PNG)
+
+### 4.3. Chat
+
+Postez des messages dans le chat ou utilisez "/" au début pour envoyer une commande dans la console.
+
+![Vue Chat](capture/chat.PNG)
+
+### 4.4. Backups
+
+Liste des sauvegardes (aucune action disponible pour le moment).
+
+![Vue Backups](capture/backup.PNG)
+
+### 4.5. Config
+
+Liste des configurations du serveur Minecraft et du panel (aucune action disponible pour le moment).
+
+![Vue Config](capture/config.PNG)
