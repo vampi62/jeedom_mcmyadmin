@@ -68,7 +68,7 @@
 				<div class="content-xs">
 					<strong>MENU</strong>
 				</div>
-				<div>
+				<div style="display:grid; grid-template-columns: 1fr 1fr; justify-content: space-around; flex-wrap: wrap;">
 					<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="string" data-cmd_id="#backend_id#" data-cmd_uid="cmd#uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #backend_collectDate#">
 						<div class="content-xs">
 							<span   class="cmdName">version mcmyadmin: </span>
@@ -96,7 +96,7 @@
 						</script>
 					</div>
 				</div>
-				<div style="display: flex; justify-content: center; flex-wrap: wrap;">
+				<div style="display:flex; justify-content: center; flex-wrap: wrap;">
 					<div class="cmd cmd-widget tooltips mcstart" data-type="action" data-subtype="other" data-template="default" data-cmd_id="#startserver_id#" data-cmd_uid="cmd#startserver_uid#" data-version="dashboard" data-eqlogic_id="#id#">
 						<div class="content-xs">
 							<a class="btn btn-sm btn-default action">start</a>
@@ -218,7 +218,7 @@
 						});
 					</script>
 				</div>
-				<div>
+				<div style="display:grid; grid-template-columns: 1fr 1fr; justify-content: space-around; flex-wrap: wrap;">
 					<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#cpuusage_id#" data-cmd_uid="cmd#cpuusage_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #cpuusage_collectDate#">
 						<div class="content-xs">
 							<span   class="cmdName">charge CPU: </span>
@@ -240,27 +240,34 @@
 							<strong class="state2"> / </strong>
 							<strong class="state3">#rammax#</strong>
 							<strong class="state4"> Mo - </strong>
-							<strong class="state5">#rampercent#</strong>
+							<strong class="state5"></strong>
 							<strong class="state6"> %</strong>
 						</div>
 						<script>
 							jeedom.cmd.addUpdateFunction('#ram_id#',function(_options) {
 								let cmd = document.querySelector('.cmd[data-cmd_id="#ram_id#"]')
 								cmd.setAttribute('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
+								d = 
 								cmd.querySelector('.state1').innerHTML = _options.display_value;
+								if (cmd.querySelector('.state3').innerHTML != 0) {
+									cmd.querySelector('.state5').innerHTML = Math.round((100/cmd.querySelector('.state3').innerHTML)*_options.display_value)
+								}
 							});
 							jeedom.cmd.addUpdateFunction('#rammax_id#',function(_options) {
 								let cmd = document.querySelector('.cmd[data-cmd_id="#ram_id#"]')
 								cmd.querySelector('.state3').innerHTML = _options.display_value;
+								if (_options.display_value != 0) {
+									cmd.querySelector('.state5').innerHTML = Math.round((100/_options.display_value)*cmd.querySelector('.state1').innerHTML)
+								}
 							});
-							jeedom.cmd.addUpdateFunction('#rampercent_id#',function(_options) {
-								let cmd = document.querySelector('.cmd[data-cmd_id="#ram_id#"]')
-								cmd.querySelector('.state5').innerHTML = _options.display_value;
-							});
+							_cmd = document.querySelector('.cmd[data-cmd_id="#ram_id#"]')
+							if (_cmd.querySelector('.state3').innerHTML != 0) {
+								_cmd.querySelector('.state5').innerHTML = Math.round((100/_cmd.querySelector('.state3').innerHTML)*_cmd.querySelector('.state1').innerHTML)
+							}
 						</script>
 					</div>
 				</div>
-				<div>
+				<div style="display:grid; grid-template-columns: 1fr 1fr; justify-content: space-around; flex-wrap: wrap;">
 					<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#users_id#" data-cmd_uid="cmd#users_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #users_collectDate#">
 						<div class="content-xs">
 							<span   class="cmdName">nombre de joueurs: </span>
@@ -294,7 +301,7 @@
 						</script>
 					</div>
 				</div>
-				<div>
+				<div style="display:grid; grid-template-columns: 1fr 1fr; justify-content: space-around; flex-wrap: wrap;">
 					<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#starttime_id#" data-cmd_uid="cmd#starttime_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #starttime_collectDate#">
 						<div class="content-xs">
 							<span   class="cmdName">démarrer depuis: </span>
@@ -323,7 +330,7 @@
 						</script>
 					</div>
 				</div>
-				<div>
+				<div style="display:grid; grid-template-columns: 1fr 1fr; justify-content: space-around; flex-wrap: wrap;">
 					<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#failed_id#" data-cmd_uid="cmd#failed_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #failed_collectDate#">
 						<div class="content-xs">
 							<span   class="cmdName">status echec: </span>
@@ -363,14 +370,17 @@
 					</div>
 					<script>
 						function #uid#addkickfunction (player) {
-							document.querySelector('.cmd[data-cmd_id="#userlist_id#"] .#userlist_id#' + player + 'kick').addEventListener('click', function () {
-							jeedom.cmd.execute({id: '#sendchat_id#', value: {message: '/kick ' + player}});
-							jeedom.cmd.execute({id: '#refresh_id#'});
+							document.querySelector('.cmd[data-cmd_id="#userlist_id#"] .kick#userlist_id#' + player).addEventListener('click', function () {
+								jeedom.cmd.execute({id: '#sendchat_id#', value: {message: '/kick ' + player}});
+								// sleep 3 secondes pour laisser le temps au serveur de traiter la commande
+								setTimeout(function() {
+									jeedom.cmd.execute({id: '#refresh_id#'});
+								}, 8000);
 							});
 						}
 						jeedom.cmd.addUpdateFunction('#userlist_id#',function(_options) {
 							let headtable = ["joueur","IP","date de connexion","kick"];
-							let commande = ["<div class=\"cmd cmd-widget\" data-type=\"action\" data-subtype=\"other\" data-template=\"default\" data-cmd_id=\"#userlist_id#\" data-cmd_uid=\"cmd#userlist_uid#\" data-version=\"dashboard\" data-eqlogic_id=\"#id#\">\<div class=\"content-xs\"><a class=\"btn btn-sm btn-default #userlist_id##value#kick\">kick<\/a><\/div><\/div>"];
+							let commande = ["<div class=\"cmd cmd-widget\" data-type=\"action\" data-subtype=\"other\" data-template=\"default\" data-cmd_id=\"#userlist_id#\" data-cmd_uid=\"cmd#userlist_uid#\" data-version=\"dashboard\" data-eqlogic_id=\"#id#\">\<div class=\"content-xs\"><a class=\"btn btn-sm btn-default kick#userlist_id##value#\">kick<\/a><\/div><\/div>"];
 							let player = #uid#js_mcmyadmin_printhtmltable(_options.display_value,'#userlist_id#',headtable,commande);
 							for(k = 0; player.length > k; k++) {
 								#uid#addkickfunction(player[k]);
@@ -414,7 +424,7 @@
 			</div>  <!-- Pan_chat -->
 			<div class="Pan_backup" style="display: none;">
 				<div class="content-xs">
-					<strong>BACKUP (en pause)</strong>
+					<strong>BACKUP</strong>
 				</div>
 				<div class="tooltips cmd cmd-widget backuplist" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#backuplist_id#" style="display: block;">
 					<div style="max-width: #widthbackuplist#px; max-height: #heightbackuplist#px; overflow:auto;">
@@ -433,7 +443,7 @@
 			</div>  <!-- Pan_backup -->
 			<div class="Pan_config" style="display: none;">
 				<div class="content-xs">
-					<strong>CONFIG (en pause)</strong>
+					<strong>CONFIG</strong>
 				</div>
 				<div class="tooltips cmd cmd-widget configlist" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#configlist_id#" style="display: block;">
 					<div style="max-width: #widthconfiglist#px; max-height: #heightconfiglist#px; overflow:auto;">
@@ -452,7 +462,7 @@
 			</div>  <!-- Pan_config -->
 		</center> 
 	</div>
-	<div class="table_bottom" style="">
+	<div class="table_bottom">
 		<table style="position:absolute; right:0px; bottom:0px; width: 100%; height:;border-radius:#border-radius#;" cellspacing="0" cellpadding="0" border="0">	
 			<tr style="height: 22px;">
 				<td class="td_bot1" style="width: 18px; text-align: left;">
