@@ -1,24 +1,30 @@
 {
-	"id" : "mcmyadmin",
-	"name" : "mcmyadmin",
-	"description" : {
-		"fr_FR": "connecter un serveur mcmyadmin à jeedom"
+	"id": "mcmyadmin",
+	"name": "mcmyadmin",
+	"description": {
+		"fr_FR": "connecter un serveur mcmyadmin à jeedom",
+		"en_US": "connect a mcmyadmin server to jeedom",
+		"es_ES": "conectar un servidor mcmyadmin a jeedom",
+		"de_DE": "einen mcmyadmin-Server mit jeedom verbinden"
 	},
-	"licence" : "AGPL",
-	"author" : "vampi62",
-	"require" : "4.2.0",
-	"category" : "monitoring",
-	"hasDependency" : false,
-	"hasOwnDeamon" : false,
-	"maxDependancyInstallTime" : 0,
-	"changelog" : "https://github.com/vampi62/jeedom_mcmyadmin/blob/main/docs/fr_FR/changelog.md",
-	"documentation" : "https://github.com/vampi62/jeedom_mcmyadmin/blob/main/docs/fr_FR/index.md",
-	"changelog_beta" : "https://github.com/vampi62/jeedom_mcmyadmin/blob/main/docs/fr_FR/changelog.md",
-	"documentation_beta" : "https://github.com/vampi62/jeedom_mcmyadmin/blob/main/docs/fr_FR/index.md",
-	"link" : {
-		"forum":"https://github.com/vampi62/jeedom_mcmyadmin/issues"
+	"licence": "AGPL",
+	"author": "vampi62",
+	"require": "4.2.0",
+	"category": "monitoring",
+	"hasDependency": false,
+	"hasOwnDeamon": false,
+	"maxDependancyInstallTime": 0,
+	"changelog": "https://github.com/vampi62/jeedom_mcmyadmin/blob/main/docs/fr_FR/changelog.md",
+	"documentation": "https://github.com/vampi62/jeedom_mcmyadmin/blob/main/docs/fr_FR/index.md",
+	"changelog_beta": "https://github.com/vampi62/jeedom_mcmyadmin/blob/main/docs/fr_FR/changelog.md",
+	"documentation_beta": "https://github.com/vampi62/jeedom_mcmyadmin/blob/main/docs/fr_FR/index.md",
+	"link": {
+		"forum": "https://github.com/vampi62/jeedom_mcmyadmin/issues"
 	},
 	"language": [
+		"de_DE",
+		"en_US",
+		"es_ES",
 		"fr_FR"
 	],
 	"compatibility": [
