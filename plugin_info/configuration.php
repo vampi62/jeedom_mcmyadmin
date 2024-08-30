@@ -25,7 +25,7 @@ if (!isConnect()) {
 <form class="form-horizontal">
   <fieldset>
     <div class="form-group">
-      <label class="col-md-2 control-label">{{nombre de ligne du chat à afficher}}</label>
+      <label class="col-md-2 control-label">{{nombre de ligne du tchat à afficher}}</label>
       <div class="col-sm-3">
         <select id="nbrchatlineshow" class="configKey form-control" data-l1key="nbrchatlineshow">
           <option value=5>5</option>

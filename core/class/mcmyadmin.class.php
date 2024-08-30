@@ -374,7 +374,7 @@ class mcmyadminCmd extends cmd {
     }
     if($MCMASESSIONID == "") {
       $eqlogic->checkAndUpdateCmd('state', "-1");
-      $eqlogic->checkAndUpdateCmd('state_text', "hors ligne");
+      $eqlogic->checkAndUpdateCmd('state_text', "{{hors ligne}}");
       $eqlogic->checkAndUpdateCmd('users', 0);
       $eqlogic->checkAndUpdateCmd('userlist', "");
       $eqlogic->checkAndUpdateCmd('ram', 0);
@@ -387,7 +387,7 @@ class mcmyadminCmd extends cmd {
     }
     if($MCMASESSIONID == "403" || $MCMASESSIONID == "429") {
       $eqlogic->checkAndUpdateCmd('state', "-1");
-      $eqlogic->checkAndUpdateCmd('state_text', "identifiants incorrects");
+      $eqlogic->checkAndUpdateCmd('state_text', "{{identifiants incorrects}}");
       return false;
     }
     switch ($this->getLogicalId()) { //vérifie le logicalid de la commande
@@ -419,25 +419,25 @@ class mcmyadminCmd extends cmd {
         switch($info['state'])
         {
           case "0":
-            $eqlogic->checkAndUpdateCmd('state_text', "stopped");
+            $eqlogic->checkAndUpdateCmd('state_text', "{{arrêté}}");
           break;
           case "10":
-            $eqlogic->checkAndUpdateCmd('state_text', "starting");
+            $eqlogic->checkAndUpdateCmd('state_text', "{{démarrage}}");
           break;
           case "20":
-            $eqlogic->checkAndUpdateCmd('state_text', "running");
+            $eqlogic->checkAndUpdateCmd('state_text', "{{démarré}}");
           break;
           case "30":
-            $eqlogic->checkAndUpdateCmd('state_text', "stopping");
+            $eqlogic->checkAndUpdateCmd('state_text', "{{arrêt}}");
           break;
           case "40":
-            $eqlogic->checkAndUpdateCmd('state_text', "restarting");
+            $eqlogic->checkAndUpdateCmd('state_text', "{{redémarrage}}");
           break;
           case "50":
-            $eqlogic->checkAndUpdateCmd('state_text', "updating");
+            $eqlogic->checkAndUpdateCmd('state_text', "{{mise à jour}}");
           break;
           default:
-            $eqlogic->checkAndUpdateCmd('state_text', "unknown");
+            $eqlogic->checkAndUpdateCmd('state_text', "{{inconnu}}");
           break;
         }
         $eqlogic->checkAndUpdateCmd('failed', $info['failed']);
