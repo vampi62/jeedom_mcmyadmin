@@ -5,7 +5,9 @@
 		"fr_FR": "connecter un serveur mcmyadmin à jeedom",
 		"en_US": "connect a mcmyadmin server to jeedom",
 		"es_ES": "conectar un servidor mcmyadmin a jeedom",
-		"de_DE": "einen mcmyadmin-Server mit jeedom verbinden"
+		"de_DE": "einen mcmyadmin-Server mit jeedom verbinden",
+		"it_IT": "collegare un server mcmyadmin a jeedom",
+		"pt_PT": "ligar um servidor mcmyadmin ao jeedom"
 	},
 	"licence": "AGPL",
 	"author": "vampi62",
@@ -25,7 +27,9 @@
 		"de_DE",
 		"en_US",
 		"es_ES",
-		"fr_FR"
+		"fr_FR",
+		"it_IT",
+		"pt_PT"
 	],
 	"compatibility": [
 		"miniplus",
