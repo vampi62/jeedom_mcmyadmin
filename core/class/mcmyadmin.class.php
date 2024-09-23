@@ -322,7 +322,7 @@ class mcmyadmin extends eqLogic {
     $replace['#heightuserlist#'] = strval(intval($replace['#height#'])-70);
     $replace['#widthuserlist#'] = strval(intval($replace['#width#']));
     $widgetType = getTemplate('core', $version, 'box', __CLASS__);
-		return $this->postToHtml($_version, template_replace($replace, $widgetType));
+		return $this->postToHtml($_version, translate::exec(template_replace($replace, $widgetType), 'plugins/mcmyadmin/core/template/' . $version . '/box.html'));
 	}
 }
 
