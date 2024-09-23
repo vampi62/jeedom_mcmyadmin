@@ -137,7 +137,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 							</div>
 							<div class="form-group">
 								<label class="col-sm-4 control-label">{{port du serveur}}
-									<sup><i class="fas fa-question-circle tooltips" title="{{Renseignez le port du serveur de mcmyadmin}}"></i></sup>
+									<sup><i class="fas fa-question-circle tooltips" title="{{Renseignez le port du serveur mcmyadmin}}"></i></sup>
 								</label>
 								<div class="col-sm-6">
 									<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="port">
@@ -145,7 +145,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 							</div>
 							<div class="form-group">
 								<label class="col-sm-4 control-label">{{nom d'utilisateur}}
-									<sup><i class="fas fa-question-circle tooltips" title="{{Renseignez le pseudo d'un compte administrateur de mcmyadmin}}"></i></sup>
+									<sup><i class="fas fa-question-circle tooltips" title="{{Renseignez le pseudo d'un compte administrateur sur le seveur mcmyadmin}}"></i></sup>
 								</label>
 								<div class="col-sm-6">
 									<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="utilisateur">
@@ -153,7 +153,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 							</div>
 							<div class="form-group">
 								<label class="col-sm-4 control-label"> {{Mot de passe}}
-									<sup><i class="fas fa-question-circle tooltips" title="{{Renseignez le mot de passe}}"></i></sup>
+									<sup><i class="fas fa-question-circle tooltips" title="{{Renseignez le mot de passe du compte administrateur}}"></i></sup>
 								</label>
 								<div class="col-sm-6">
 									<input type="text" class="eqLogicAttr form-control inputPassword" data-l1key="configuration" data-l2key="password">

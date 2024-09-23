@@ -68,63 +68,63 @@
 				<div class="content-xs">
 					<strong>MENU</strong>
 				</div>
-				<div>
-					<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="string" data-cmd_id="#backend_id#" data-cmd_uid="cmd#uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #backend_collectDate#">
+				<div style="display:grid; grid-template-columns: 1fr 1fr; justify-content: space-around; flex-wrap: wrap;">
+					<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="string" data-cmd_id="#backend_id#" data-cmd_uid="cmd#uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="{{Valeur du :}} #backend_collectDate#">
 						<div class="content-xs">
-							<span   class="cmdName">version mcmyadmin: </span>
+							<span   class="cmdName">{{version mcmyadmin:}} </span>
 							<strong class="state">#backend#</strong>
 						</div>
 						<script>
 							jeedom.cmd.addUpdateFunction('#backend_id#',function(_options) {
 								let cmd = document.querySelector('.cmd[data-cmd_id="#backend_id#"]')
-								cmd.setAttribute('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
+								cmd.setAttribute('title', '{{Valeur du :}} '+_options.collectDate)
 								cmd.querySelector('.state').innerHTML = _options.display_value;
 							});
 						</script>
 					</div>
-					<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="string" data-cmd_id="#mc_id#" data-cmd_uid="cmd#uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #mc_collectDate#">
+					<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="string" data-cmd_id="#mc_id#" data-cmd_uid="cmd#uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="{{Valeur du :}} #mc_collectDate#">
 						<div class="content-xs">
-							<span   class="cmdName">version mc: </span>
+							<span   class="cmdName">{{version minecraft:}} </span>
 							<strong class="state">#mc#</strong>
 						</div>
 						<script>
 							jeedom.cmd.addUpdateFunction('#mc_id#',function(_options) {
 								let cmd = document.querySelector('.cmd[data-cmd_id="#mc_id#"]')
-								cmd.setAttribute('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
+								cmd.setAttribute('title', '{{Valeur du :}} '+_options.collectDate)
 								cmd.querySelector('.state').innerHTML = _options.display_value;
 							});
 						</script>
 					</div>
 				</div>
-				<div style="display: flex; justify-content: center; flex-wrap: wrap;">
+				<div style="display:flex; justify-content: center; flex-wrap: wrap;">
 					<div class="cmd cmd-widget tooltips mcstart" data-type="action" data-subtype="other" data-template="default" data-cmd_id="#startserver_id#" data-cmd_uid="cmd#startserver_uid#" data-version="dashboard" data-eqlogic_id="#id#">
 						<div class="content-xs">
-							<a class="btn btn-sm btn-default action">start</a>
+							<a class="btn btn-sm btn-default action">{{démarrée}}</a>
 						</div>
 					</div>
 					<div class="cmd cmd-widget tooltips mcrestart" data-type="action" data-subtype="other" data-template="default" data-cmd_id="#restartserver_id#" data-cmd_uid="cmd#restartserver_uid#" data-version="dashboard" data-eqlogic_id="#id#">
 						<div class="content-xs">
-							<a class="btn btn-sm btn-default action">restart</a>
+							<a class="btn btn-sm btn-default action">{{redémarrer}}</a>
 						</div>
 					</div>
 					<div class="cmd cmd-widget tooltips mcshutdown" data-type="action" data-subtype="other" data-template="default" data-cmd_id="#stopserver_id#" data-cmd_uid="cmd#stopserver_uid#" data-version="dashboard" data-eqlogic_id="#id#">
 						<div class="content-xs">
-							<a class="btn btn-sm btn-default action">shutdown</a>
+							<a class="btn btn-sm btn-default action">{{arrêter}}</a>
 						</div>
 					</div>
 					<div class="cmd cmd-widget tooltips mcsleep" data-type="action" data-subtype="other" data-template="default" data-cmd_id="#sleepserver_id#" data-cmd_uid="cmd#sleepserver_uid#" data-version="dashboard" data-eqlogic_id="#id#">
 						<div class="content-xs">
-							<a class="btn btn-sm btn-default action">sleep</a>
+							<a class="btn btn-sm btn-default action">{{veille}}</a>
 						</div>
 					</div>
 					<div class="cmd cmd-widget tooltips mcreload" data-type="action" data-subtype="other" data-template="default" data-cmd_id="#reload_id#" data-cmd_uid="cmd#reload_uid#" data-version="dashboard" data-eqlogic_id="#id#">
 						<div class="content-xs">
-							<a class="btn btn-sm btn-default action">reload</a>
+							<a class="btn btn-sm btn-default action">{{recharger}}</a>
 						</div>
 					</div>
 					<div class="cmd cmd-widget tooltips mckill" data-type="action" data-subtype="other" data-template="default" data-cmd_id="#killserver_id#" data-cmd_uid="cmd#killserver_uid#" data-version="dashboard" data-eqlogic_id="#id#">
 						<div class="content-xs">
-							<a class="btn btn-sm btn-default action">kill</a>
+							<a class="btn btn-sm btn-default action">{{tuer}}</a>
 						</div>
 					</div>
 					<script>
@@ -218,52 +218,59 @@
 						});
 					</script>
 				</div>
-				<div>
-					<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#cpuusage_id#" data-cmd_uid="cmd#cpuusage_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #cpuusage_collectDate#">
+				<div style="display:grid; grid-template-columns: 1fr 1fr; justify-content: space-around; flex-wrap: wrap;">
+					<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#cpuusage_id#" data-cmd_uid="cmd#cpuusage_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="{{Valeur du :}} #cpuusage_collectDate#">
 						<div class="content-xs">
-							<span   class="cmdName">charge CPU: </span>
+							<span   class="cmdName">{{charge CPU:}} </span>
 							<strong class="state1">#cpuusage#</strong>
 							<strong class="state2"> %</strong>
 						</div>
 						<script>
 							jeedom.cmd.addUpdateFunction('#cpuusage_id#',function(_options) {
 								let cmd = document.querySelector('.cmd[data-cmd_id="#cpuusage_id#"]')
-								cmd.setAttribute('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
+								cmd.setAttribute('title', '{{Valeur du :}} '+_options.collectDate)
 								cmd.querySelector('.state1').innerHTML = _options.display_value;
 							});
 						</script>
 					</div>
-					<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#ram_id#" data-cmd_uid="cmd#ram_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #ram_collectDate#">
+					<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#ram_id#" data-cmd_uid="cmd#ram_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="{{Valeur du :}} #ram_collectDate#">
 						<div class="content-xs">
-							<span   class="cmdName">charge RAM: </span>
+							<span   class="cmdName">{{charge RAM:}} </span>
 							<strong class="state1">#ram#</strong>
 							<strong class="state2"> / </strong>
 							<strong class="state3">#rammax#</strong>
 							<strong class="state4"> Mo - </strong>
-							<strong class="state5">#rampercent#</strong>
+							<strong class="state5"></strong>
 							<strong class="state6"> %</strong>
 						</div>
 						<script>
 							jeedom.cmd.addUpdateFunction('#ram_id#',function(_options) {
 								let cmd = document.querySelector('.cmd[data-cmd_id="#ram_id#"]')
-								cmd.setAttribute('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
+								cmd.setAttribute('title', '{{Valeur du :}} '+_options.collectDate)
+								d = 
 								cmd.querySelector('.state1').innerHTML = _options.display_value;
+								if (cmd.querySelector('.state3').innerHTML != 0) {
+									cmd.querySelector('.state5').innerHTML = Math.round((100/cmd.querySelector('.state3').innerHTML)*_options.display_value)
+								}
 							});
 							jeedom.cmd.addUpdateFunction('#rammax_id#',function(_options) {
 								let cmd = document.querySelector('.cmd[data-cmd_id="#ram_id#"]')
 								cmd.querySelector('.state3').innerHTML = _options.display_value;
+								if (_options.display_value != 0) {
+									cmd.querySelector('.state5').innerHTML = Math.round((100/_options.display_value)*cmd.querySelector('.state1').innerHTML)
+								}
 							});
-							jeedom.cmd.addUpdateFunction('#rampercent_id#',function(_options) {
-								let cmd = document.querySelector('.cmd[data-cmd_id="#ram_id#"]')
-								cmd.querySelector('.state5').innerHTML = _options.display_value;
-							});
+							_cmd = document.querySelector('.cmd[data-cmd_id="#ram_id#"]')
+							if (_cmd.querySelector('.state3').innerHTML != 0) {
+								_cmd.querySelector('.state5').innerHTML = Math.round((100/_cmd.querySelector('.state3').innerHTML)*_cmd.querySelector('.state1').innerHTML)
+							}
 						</script>
 					</div>
 				</div>
-				<div>
-					<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#users_id#" data-cmd_uid="cmd#users_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #users_collectDate#">
+				<div style="display:grid; grid-template-columns: 1fr 1fr; justify-content: space-around; flex-wrap: wrap;">
+					<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#users_id#" data-cmd_uid="cmd#users_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="{{Valeur du :}} #users_collectDate#">
 						<div class="content-xs">
-							<span   class="cmdName">nombre de joueurs: </span>
+							<span   class="cmdName">{{nombre de joueurs:}} </span>
 							<strong class="state1">#users#</strong>
 							<strong class="state2"> / </strong>
 							<strong class="state3">#usermax#</strong>
@@ -271,7 +278,7 @@
 						<script>
 							jeedom.cmd.addUpdateFunction('#users_id#',function(_options) {
 								let cmd = document.querySelector('.cmd[data-cmd_id="#users_id#"]')
-								cmd.setAttribute('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
+								cmd.setAttribute('title', '{{Valeur du :}} '+_options.collectDate)
 								cmd.querySelector('.state1').innerHTML = _options.display_value;
 							});
 							jeedom.cmd.addUpdateFunction('#usermax_id#',function(_options) {
@@ -280,72 +287,72 @@
 							});
 						</script>
 					</div>
-					<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#state_text_id#" data-cmd_uid="cmd#state_text_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #state_text_collectDate#">
+					<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#state_text_id#" data-cmd_uid="cmd#state_text_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="{{Valeur du :}} #state_text_collectDate#">
 						<div class="content-xs">
-							<span   class="cmdName">status serveur: </span>
+							<span   class="cmdName">{{status serveur:}} </span>
 							<strong class="state">#state_text#</strong>
 						</div>
 						<script>
 							jeedom.cmd.addUpdateFunction('#state_text_id#',function(_options) {
 								let cmd = document.querySelector('.cmd[data-cmd_id="#state_text_id#"]')
-								cmd.setAttribute('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
+								cmd.setAttribute('title', '{{Valeur du :}} '+_options.collectDate)
 								cmd.querySelector('.state').innerHTML = _options.display_value;
 							});
 						</script>
 					</div>
 				</div>
-				<div>
-					<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#starttime_id#" data-cmd_uid="cmd#starttime_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #starttime_collectDate#">
+				<div style="display:grid; grid-template-columns: 1fr 1fr; justify-content: space-around; flex-wrap: wrap;">
+					<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#starttime_id#" data-cmd_uid="cmd#starttime_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="{{Valeur du :}} #starttime_collectDate#">
 						<div class="content-xs">
-							<span   class="cmdName">démarrer depuis: </span>
+							<span   class="cmdName">{{démarrer depuis:}} </span>
 							<strong class="state">#starttime#</strong>
 						</div>
 						<script>
 							jeedom.cmd.addUpdateFunction('#starttime_id#',function(_options) {
 								let cmd = document.querySelector('.cmd[data-cmd_id="#starttime_id#"]')
-								cmd.setAttribute('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
+								cmd.setAttribute('title', '{{Valeur du :}} '+_options.collectDate)
 								cmd.querySelector('.state').innerHTML = _options.display_value;
 							});
 						</script>
 					</div>
-					<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#time_id#" data-cmd_uid="cmd#time_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #time_collectDate#">
+					<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#time_id#" data-cmd_uid="cmd#time_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="{{Valeur du :}} #time_collectDate#">
 						<div class="content-xs">
-							<span   class="cmdName">temps serveur: </span>
+							<span   class="cmdName">{{temps serveur:}} </span>
 							<strong class="state">#time#</strong>
 						</div>
 						<script>
 							jeedom.cmd.addUpdateFunction('#time_id#',function(_options) {
 								let cmd = document.querySelector('.cmd[data-cmd_id="#time_id#"]')
-								cmd.setAttribute('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
+								cmd.setAttribute('title', '{{Valeur du :}} '+_options.collectDate)
 								cmd.querySelector('.state').innerHTML = '';
 								cmd.querySelector('.state').append(_options.display_value);
 							});
 						</script>
 					</div>
 				</div>
-				<div>
-					<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#failed_id#" data-cmd_uid="cmd#failed_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #failed_collectDate#">
+				<div style="display:grid; grid-template-columns: 1fr 1fr; justify-content: space-around; flex-wrap: wrap;">
+					<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#failed_id#" data-cmd_uid="cmd#failed_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="{{Valeur du :}} #failed_collectDate#">
 						<div class="content-xs">
-							<span   class="cmdName">status echec: </span>
+							<span   class="cmdName">{{status echec:}} </span>
 							<strong class="state">#failed#</strong>
 						</div>
 						<script>
 							jeedom.cmd.addUpdateFunction('#failed_id#',function(_options) {
 								let cmd = document.querySelector('.cmd[data-cmd_id="#failed_id#"]')
-								cmd.setAttribute('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
+								cmd.setAttribute('title', '{{Valeur du :}} '+_options.collectDate)
 								cmd.querySelector('.state').innerHTML = _options.display_value;
 							});
 						</script>
 					</div>
-					<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#failmsg_id#" data-cmd_uid="cmd#failmsg_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="Valeur du: #failmsg_collectDate#">
+					<div class="tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#failmsg_id#" data-cmd_uid="cmd#failmsg_uid#" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" title="{{Valeur du :}} #failmsg_collectDate#">
 						<div class="content-xs">
-							<span   class="cmdName">message echec: </span>
+							<span   class="cmdName">{{message echec:}} </span>
 							<strong class="state">#failmsg#</strong>
 						</div>
 						<script>
 							jeedom.cmd.addUpdateFunction('#failmsg_id#',function(_options) {
 								let cmd = document.querySelector('.cmd[data-cmd_id="#failmsg_id#"]')
-								cmd.setAttribute('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
+								cmd.setAttribute('title', '{{Valeur du :}} '+_options.collectDate)
 								cmd.querySelector('.state').innerHTML = _options.display_value;
 							});
 						</script>
@@ -363,14 +370,17 @@
 					</div>
 					<script>
 						function #uid#addkickfunction (player) {
-							document.querySelector('.cmd[data-cmd_id="#userlist_id#"] .#userlist_id#' + player + 'kick').addEventListener('click', function () {
-							jeedom.cmd.execute({id: '#sendchat_id#', value: {message: '/kick ' + player}});
-							jeedom.cmd.execute({id: '#refresh_id#'});
+							document.querySelector('.cmd[data-cmd_id="#userlist_id#"] .kick#userlist_id#' + player).addEventListener('click', function () {
+								jeedom.cmd.execute({id: '#sendchat_id#', value: {message: '/kick ' + player}});
+								// sleep 3 secondes pour laisser le temps au serveur de traiter la commande
+								setTimeout(function() {
+									jeedom.cmd.execute({id: '#refresh_id#'});
+								}, 8000);
 							});
 						}
 						jeedom.cmd.addUpdateFunction('#userlist_id#',function(_options) {
-							let headtable = ["joueur","IP","date de connexion","kick"];
-							let commande = ["<div class=\"cmd cmd-widget\" data-type=\"action\" data-subtype=\"other\" data-template=\"default\" data-cmd_id=\"#userlist_id#\" data-cmd_uid=\"cmd#userlist_uid#\" data-version=\"dashboard\" data-eqlogic_id=\"#id#\">\<div class=\"content-xs\"><a class=\"btn btn-sm btn-default #userlist_id##value#kick\">kick<\/a><\/div><\/div>"];
+							let headtable = ["{{joueur}}","{{IP}}","{{date de connexion}}","{{kick}}"];
+							let commande = ["<div class=\"cmd cmd-widget\" data-type=\"action\" data-subtype=\"other\" data-template=\"default\" data-cmd_id=\"#userlist_id#\" data-cmd_uid=\"cmd#userlist_uid#\" data-version=\"dashboard\" data-eqlogic_id=\"#id#\">\<div class=\"content-xs\"><a class=\"btn btn-sm btn-default kick#userlist_id##value#\">kick<\/a><\/div><\/div>"];
 							let player = #uid#js_mcmyadmin_printhtmltable(_options.display_value,'#userlist_id#',headtable,commande);
 							for(k = 0; player.length > k; k++) {
 								#uid#addkickfunction(player[k]);
@@ -382,7 +392,7 @@
 			</div>  <!-- Pan_joueur -->
 			<div class="Pan_chat" style="display: none;">
 				<div class="content-xs">
-					<strong>CHAT</strong>
+					<strong>TCHAT</strong>
 				</div>
 				<div class="tooltips cmd cmd-widget chat" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#chat_id#" style="display: block;">
 					<div style="max-width: #widthchat#px; max-height: #heightchat#px; overflow:auto;">
@@ -391,7 +401,7 @@
 					</div>
 					<script>
 						jeedom.cmd.addUpdateFunction('#chat_id#',function(_options) {
-							headtable = ["date","joueur","message"];
+							headtable = ["{{date}}","{{joueur}}","{{message}}"];
 							commande = [];
 							let player = #uid#js_mcmyadmin_printhtmltable(_options.display_value,'#chat_id#',headtable,commande);
 						});
@@ -401,7 +411,7 @@
 				<div class="tooltips cmd cmd-widget sendchat" data-type="action" data-subtype="message" data-cmd_id="#sendchat_id#" data-cmd_uid="cmd#sendchat_uid#" data-version="dashboard" data-template="default" data-eqlogic_id="#id#">
 					<div class="content-lg">
 						<textarea class="form-control input-sm message" rows="1" placeholder="Message" data-cmd_id="#sendchat_id#" data-cmd_uid="cmd#sendchat_uid#"></textarea>
-						<a class="btn btn-xs execute">envoyer</a>
+						<a class="btn btn-xs execute">{{envoyer}}</a>
 					</div>
 					<script>
 						document.querySelector('.cmd[data-cmd_id="#sendchat_id#"] .execute').addEventListener('click', function() {
@@ -411,10 +421,10 @@
 						});
 					</script>
 				</div>
-			</div>  <!-- Pan_chat -->
+			</div>  <!-- Pan_tchat -->
 			<div class="Pan_backup" style="display: none;">
 				<div class="content-xs">
-					<strong>BACKUP (en pause)</strong>
+					<strong>BACKUP</strong>
 				</div>
 				<div class="tooltips cmd cmd-widget backuplist" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#backuplist_id#" style="display: block;">
 					<div style="max-width: #widthbackuplist#px; max-height: #heightbackuplist#px; overflow:auto;">
@@ -423,7 +433,7 @@
 					</div>
 					<script>
 						jeedom.cmd.addUpdateFunction('#backuplist_id#',function(_options) {
-							headtable = ["nom","date","restaurer","supprimer"];
+							headtable = ["{{nom}}","{{date}}","{{restaurer}}","{{supprimer}}"];
 							commande = [];
 							let player = #uid#js_mcmyadmin_printhtmltable(_options.display_value,'#backuplist_id#',headtable,commande);
 						});
@@ -433,7 +443,7 @@
 			</div>  <!-- Pan_backup -->
 			<div class="Pan_config" style="display: none;">
 				<div class="content-xs">
-					<strong>CONFIG (en pause)</strong>
+					<strong>{{CONFIGURATION}}</strong>
 				</div>
 				<div class="tooltips cmd cmd-widget configlist" data-type="info" data-subtype="string" data-version="dashboard" data-template="default" data-eqlogic_id="#configlist_id#" style="display: block;">
 					<div style="max-width: #widthconfiglist#px; max-height: #heightconfiglist#px; overflow:auto;">
@@ -442,7 +452,7 @@
 					</div>
 					<script>
 						jeedom.cmd.addUpdateFunction('#configlist_id#',function(_options) {
-							headtable = ["nom","valeur"];
+							headtable = ["{{nom}}","{{valeur}}"];
 							commande = [];
 							let player = #uid#js_mcmyadmin_printhtmltable(_options.display_value,'#configlist_id#',headtable,commande);
 						});
@@ -452,7 +462,7 @@
 			</div>  <!-- Pan_config -->
 		</center> 
 	</div>
-	<div class="table_bottom" style="">
+	<div class="table_bottom">
 		<table style="position:absolute; right:0px; bottom:0px; width: 100%; height:;border-radius:#border-radius#;" cellspacing="0" cellpadding="0" border="0">	
 			<tr style="height: 22px;">
 				<td class="td_bot1" style="width: 18px; text-align: left;">
@@ -460,14 +470,14 @@
 					<div class="infhtm" style="display: none;"> 
 						<div class="tooltips cmd cmd-widget lastCommunication" data-type="info" data-subtype="string" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" style="display: block;">
 							<div class="content-xs">
-								<span   class="cmdName">last Communication: </span> 
+								<span   class="cmdName">{{dernière communication:}} </span>
 								<strong class="state">#lastCommunication#</strong>
 							</div>
 						</div>
 						<br/>
 						<div class="tooltips cmd cmd-widget numberTryWithoutSuccess" data-type="info" data-subtype="string" data-version="dashboard" data-template="line" data-eqlogic_id="#id#" style="display: block;">
 							<div class="content-xs">
-								<span   class="cmdName">nombre de tentative de reconnexion: </span> 
+								<span   class="cmdName">{{nombre de tentative de reconnexion:}} </span> 
 								<strong class="state">#numberTryWithoutSuccess#</strong>
 							</div>
 						</div>

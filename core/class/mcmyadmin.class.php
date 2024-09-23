@@ -51,6 +51,10 @@ class mcmyadmin extends eqLogic {
 
   // Fonction exécutée automatiquement avant la création de l'équipement
   public function preInsert() {
+    $this->setDisplay('height', '402px');
+    $this->setDisplay('width', '458px');
+    $this->setIsEnable(1);
+    $this->setIsVisible(1);
   }
 
   // Fonction exécutée automatiquement après la création de l'équipement
@@ -129,7 +133,6 @@ class mcmyadmin extends eqLogic {
     $this->create_element('cpuusage','cpuusage','info','string', '%');
     $this->create_element('ram','ram','info','string','Mo');
     $this->create_element('rammax','rammax','info','string','Mo');
-    $this->create_element('rampercent','rampercent','info','string','%');
     $this->create_element('users','users','info','string');
     $this->create_element('usermax','usermax','info','string');
     $element = $this->getCmd(null, 'sendchat');
@@ -319,7 +322,7 @@ class mcmyadmin extends eqLogic {
     $replace['#heightuserlist#'] = strval(intval($replace['#height#'])-70);
     $replace['#widthuserlist#'] = strval(intval($replace['#width#']));
     $widgetType = getTemplate('core', $version, 'box', __CLASS__);
-		return $this->postToHtml($_version, template_replace($replace, $widgetType));
+		return $this->postToHtml($_version, translate::exec(template_replace($replace, $widgetType), 'plugins/mcmyadmin/core/template/' . $version . '/box.html'));
 	}
 }
 
@@ -371,12 +374,20 @@ class mcmyadminCmd extends cmd {
     }
     if($MCMASESSIONID == "") {
       $eqlogic->checkAndUpdateCmd('state', "-1");
-      $eqlogic->checkAndUpdateCmd('state_text', "hors ligne");
+      $eqlogic->checkAndUpdateCmd('state_text', "{{hors ligne}}");
+      $eqlogic->checkAndUpdateCmd('users', 0);
+      $eqlogic->checkAndUpdateCmd('userlist', "");
+      $eqlogic->checkAndUpdateCmd('ram', 0);
+      $eqlogic->checkAndUpdateCmd('starttime', "[ unknown ]");
+      $eqlogic->checkAndUpdateCmd('cpuusage', 0);
+      $eqlogic->checkAndUpdateCmd('chat', "");
+      $eqlogic->checkAndUpdateCmd('failed', "");
+      $eqlogic->checkAndUpdateCmd('failmsg', "");
       return false;
     }
     if($MCMASESSIONID == "403" || $MCMASESSIONID == "429") {
       $eqlogic->checkAndUpdateCmd('state', "-1");
-      $eqlogic->checkAndUpdateCmd('state_text', "identifiants incorrects");
+      $eqlogic->checkAndUpdateCmd('state_text', "{{identifiants incorrects}}");
       return false;
     }
     switch ($this->getLogicalId()) { //vérifie le logicalid de la commande
@@ -408,25 +419,25 @@ class mcmyadminCmd extends cmd {
         switch($info['state'])
         {
           case "0":
-            $eqlogic->checkAndUpdateCmd('state_text', "stopped");
+            $eqlogic->checkAndUpdateCmd('state_text', "{{arrêté}}");
           break;
           case "10":
-            $eqlogic->checkAndUpdateCmd('state_text', "starting");
+            $eqlogic->checkAndUpdateCmd('state_text', "{{démarrage}}");
           break;
           case "20":
-            $eqlogic->checkAndUpdateCmd('state_text', "running");
+            $eqlogic->checkAndUpdateCmd('state_text', "{{démarré}}");
           break;
           case "30":
-            $eqlogic->checkAndUpdateCmd('state_text', "stopping");
+            $eqlogic->checkAndUpdateCmd('state_text', "{{arrêt}}");
           break;
           case "40":
-            $eqlogic->checkAndUpdateCmd('state_text', "restarting");
+            $eqlogic->checkAndUpdateCmd('state_text', "{{redémarrage}}");
           break;
           case "50":
-            $eqlogic->checkAndUpdateCmd('state_text', "updating");
+            $eqlogic->checkAndUpdateCmd('state_text', "{{mise à jour}}");
           break;
           default:
-            $eqlogic->checkAndUpdateCmd('state_text', "unknown");
+            $eqlogic->checkAndUpdateCmd('state_text', "{{inconnu}}");
           break;
         }
         $eqlogic->checkAndUpdateCmd('failed', $info['failed']);
@@ -438,7 +449,6 @@ class mcmyadminCmd extends cmd {
         //$eqlogic->set_limit_element('ram',0,$info['maxram']);
         $eqlogic->checkAndUpdateCmd('ram', $info['ram']);
         $eqlogic->checkAndUpdateCmd('rammax', $info['maxram']);
-        $eqlogic->checkAndUpdateCmd('rampercent', strval(round((100/$info['maxram'])*$info['ram'],2)));
         $eqlogic->checkAndUpdateCmd('starttime', $info['starttime']);
         $eqlogic->checkAndUpdateCmd('cpuusage', $info['cpuusage']);
         $cmd = $eqlogic->getCmd(null, 'refresh_version');
